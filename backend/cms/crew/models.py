@@ -1,6 +1,6 @@
 from django.db import models
 
-from backend.cms.vessels.models import Vessel
+from ..vessels.models import Vessel
 
 
 class CrewMember(models.Model):

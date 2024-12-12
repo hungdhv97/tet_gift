@@ -51,10 +51,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "crew",
-    "tracking",
-    "users",
-    "vessels",
+    "cms.crew",
+    "cms.tracking",
+    "cms.users",
+    "cms.vessels",
 ]
 
 MIDDLEWARE = [
