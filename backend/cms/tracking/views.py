@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from .models import PositionHistory
+from .serializers import PositionHistorySerializer
+
+
+class PositionHistoryViewSet(viewsets.ModelViewSet):
+    queryset = PositionHistory.objects.all()
+    serializer_class = PositionHistorySerializer

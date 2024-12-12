@@ -12,3 +12,4 @@ django-ckeditor-5
 redis[hiredis]
 attrs
 black
+channels

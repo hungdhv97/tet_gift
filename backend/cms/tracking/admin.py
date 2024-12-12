@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import PositionHistory
+
+
+@admin.register(PositionHistory)
+class PositionHistoryAdmin(admin.ModelAdmin):
+    list_display = ("vessel", "latitude", "longitude", "timestamp")
+    list_filter = ("vessel", "timestamp")
