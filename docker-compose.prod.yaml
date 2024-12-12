@@ -4,11 +4,6 @@ services:
       context: ./backend
     container_name: vessel_tracking_backend
     image: vessel_tracking_backend
-    depends_on:
-      vessel_tracking_postgresql:
-        condition: service_healthy
-      vessel_tracking_redis:
-        condition: service_started
     environment:
       POSTGRES_DB: vessel_tracking
       POSTGRES_USER: admin
@@ -16,9 +11,6 @@ services:
       POSTGRES_HOST: 192.233.84.195
       POSTGRES_PORT: 5432
       FRONTEND_URL: https://www.quanlytauca.site
-      REDIS_HOST: vessel_tracking_redis
-      REDIS_PORT: 6379
-      REDIS_DATABASE: 1
     command: >
       sh -c "
       python manage.py migrate &&
