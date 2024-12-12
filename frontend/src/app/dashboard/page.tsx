@@ -16,7 +16,7 @@ import { Line, Pie } from "react-chartjs-2";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement);
 
-interface Ship {
+interface Vessel {
     id: number;
     name: string;
     status: "Đang Vận Chuyển" | "Đã Cập Bến";
@@ -26,12 +26,12 @@ interface Ship {
 }
 
 const ShipManagementDashboard: React.FC = () => {
-    const [ships, setShips] = useState<Ship[]>([]);
+    const [vessels, setVessels] = useState<Vessel[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
-    const [selectedShip, setSelectedShip] = useState<Ship | null>(null);
+    const [selectedVessel, setSelectedVessel] = useState<Vessel | null>(null);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const mockShips: Ship[] = [
+    const mockVessels: Vessel[] = [
         {
             id: 1,
             name: "Ocean Explorer",
@@ -59,7 +59,7 @@ const ShipManagementDashboard: React.FC = () => {
     ];
 
     useEffect(() => {
-        setShips(mockShips);
+        setVessels(mockVessels);
     }, []);
 
     const pieChartData = {
@@ -67,8 +67,8 @@ const ShipManagementDashboard: React.FC = () => {
         datasets: [
             {
                 data: [
-                    ships.filter(ship => ship.status === "Đang Vận Chuyển").length,
-                    ships.filter(ship => ship.status === "Đã Cập Bến").length,
+                    vessels.filter(vessel => vessel.status === "Đang Vận Chuyển").length,
+                    vessels.filter(vessel => vessel.status === "Đã Cập Bến").length,
                 ],
                 backgroundColor: ["#3B82F6", "#10B981"],
                 borderColor: ["#2563EB", "#059669"],
@@ -88,17 +88,17 @@ const ShipManagementDashboard: React.FC = () => {
         ],
     };
 
-    const handleEdit = (ship: Ship) => {
-        setSelectedShip(ship);
+    const handleEdit = (vessel: Vessel) => {
+        setSelectedVessel(vessel);
         setIsModalOpen(true);
     };
 
     const handleDelete = (id: number) => {
-        setShips(ships.filter(ship => ship.id !== id));
+        setVessels(vessels.filter(vessel => vessel.id !== id));
     };
 
-    const filteredShips = ships.filter(ship =>
-        ship.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    const filteredVessels = vessels.filter(vessel =>
+        vessel.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     return (
@@ -116,7 +116,7 @@ const ShipManagementDashboard: React.FC = () => {
                             <FaShip className="text-blue-500 text-3xl mr-4" />
                             <div>
                                 <p className="text-gray-500">Tổng Số Tàu</p>
-                                <p className="text-2xl font-bold">{ships.length}</p>
+                                <p className="text-2xl font-bold">{vessels.length}</p>
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@ const ShipManagementDashboard: React.FC = () => {
                             <div>
                                 <p className="text-gray-500">Tàu Đã Cập Bến</p>
                                 <p className="text-2xl font-bold">
-                                    {ships.filter(ship => ship.status === "Đã Cập Bến").length}
+                                    {vessels.filter(vessel => vessel.status === "Đã Cập Bến").length}
                                 </p>
                             </div>
                         </div>
@@ -137,7 +137,7 @@ const ShipManagementDashboard: React.FC = () => {
                             <div>
                                 <p className="text-gray-500">Tàu Đang Vận Chuyển</p>
                                 <p className="text-2xl font-bold">
-                                    {ships.filter(ship => ship.status === "Đang Vận Chuyển").length}
+                                    {vessels.filter(vessel => vessel.status === "Đang Vận Chuyển").length}
                                 </p>
                             </div>
                         </div>
@@ -192,43 +192,43 @@ const ShipManagementDashboard: React.FC = () => {
                             </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                            {filteredShips.map((ship) => (
-                                <tr key={ship.id}>
+                            {filteredVessels.map((vessel) => (
+                                <tr key={vessel.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <img
                                                 className="h-10 w-10 rounded-full object-cover"
-                                                src={ship.image}
-                                                alt={ship.name}
+                                                src={vessel.image}
+                                                alt={vessel.name}
                                             />
                                             <div className="ml-4">
-                                                <div className="text-sm font-medium text-gray-900">{ship.name}</div>
+                                                <div className="text-sm font-medium text-gray-900">{vessel.name}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              ship.status === "Đang Vận Chuyển"
+                              vessel.status === "Đang Vận Chuyển"
                                   ? "bg-blue-100 text-blue-800"
                                   : "bg-green-100 text-green-800"
                           }`}
                       >
-                        {ship.status}
+                        {vessel.status}
                       </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {ship.location}
+                                        {vessel.location}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <button
-                                            onClick={() => handleEdit(ship)}
+                                            onClick={() => handleEdit(vessel)}
                                             className="text-blue-600 hover:text-blue-900 mr-4"
                                         >
                                             <FaEdit className="text-xl" />
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(ship.id)}
+                                            onClick={() => handleDelete(vessel.id)}
                                             className="text-red-600 hover:text-red-900"
                                         >
                                             <FaTrash className="text-xl" />
@@ -251,7 +251,7 @@ const ShipManagementDashboard: React.FC = () => {
             </div>
 
             {/* Edit Modal */}
-            {isModalOpen && selectedShip && (
+            {isModalOpen && selectedVessel && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white rounded-lg p-8 max-w-md w-full">
                         <h2 className="text-xl font-bold mb-4">Chỉnh Sửa Chi Tiết Tàu</h2>
@@ -262,7 +262,7 @@ const ShipManagementDashboard: React.FC = () => {
                             <input
                                 type="text"
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                                value={selectedShip.name}
+                                value={selectedVessel.name}
                                 readOnly
                             />
                         </div>
@@ -272,10 +272,10 @@ const ShipManagementDashboard: React.FC = () => {
                             </label>
                             <select
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                                value={selectedShip.status}
+                                value={selectedVessel.status}
                                 onChange={(e) =>
-                                    setSelectedShip({
-                                        ...selectedShip,
+                                    setSelectedVessel({
+                                        ...selectedVessel,
                                         status: e.target.value as "Đang Vận Chuyển" | "Đã Cập Bến",
                                     })
                                 }

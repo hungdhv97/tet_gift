@@ -3,6 +3,7 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaLock, FaUser } from "react-icons/fa";
+import { useLogin } from "@/queries/auth";
 
 interface FormData {
     username: string;
@@ -19,6 +20,7 @@ const LoginPage: React.FC = () => {
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
     const router = useRouter();
+    const login = useLogin();
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -38,13 +40,14 @@ const LoginPage: React.FC = () => {
             return;
         }
 
-        setTimeout(() => {
-            if (formData.username === "haidoi2" && formData.password === "1234") {
-                router.push("/dashboard");
-            } else {
-                setError("Thông tin đăng nhập không hợp lệ");
-            }
-        }, 100);
+        login.mutate(
+            { username: formData.username, password: formData.password },
+            {
+                onSuccess: () => {
+                    router.push("/dashboard");
+                },
+            },
+        );
     };
 
     return (

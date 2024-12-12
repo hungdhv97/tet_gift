@@ -5,6 +5,7 @@ from django.urls import (
 from rest_framework.routers import DefaultRouter
 
 from .views import (
+    GetCurrentUserAPIView,
     LoginAPIView,
     UserViewSet,
 )
@@ -19,4 +20,5 @@ urlpatterns = [
         LoginAPIView.as_view(),
         name="login",
     ),
+    path("me/", GetCurrentUserAPIView.as_view(), name="get-current-user"),
 ]
