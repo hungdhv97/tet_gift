@@ -35,10 +35,10 @@ const EditVessel: React.FC = () => {
 
     const validateForm = (): boolean => {
         let tempErrors: Partial<FormData> = {};
-        if (!formData.name) tempErrors.name = "Name is required";
+        if (!formData.name) tempErrors.name = "Tên tàu là bắt buộc";
         if (!formData.imoNumber || !/^IMO\d{7}$/.test(formData.imoNumber)) {
             tempErrors.imoNumber =
-                "Invalid IMO number format (e.g., IMO1234567)";
+                "Định dạng số IMO không hợp lệ (vd., IMO1234567)";
         }
         if (
             !formData.latitude ||
@@ -46,7 +46,7 @@ const EditVessel: React.FC = () => {
             Number(formData.latitude) < -90 ||
             Number(formData.latitude) > 90
         ) {
-            tempErrors.latitude = "Invalid latitude (-90 to 90)";
+            tempErrors.latitude = "Vĩ độ không hợp lệ (-90 đến 90)";
         }
         if (
             !formData.longitude ||
@@ -54,16 +54,16 @@ const EditVessel: React.FC = () => {
             Number(formData.longitude) < -180 ||
             Number(formData.longitude) > 180
         ) {
-            tempErrors.longitude = "Invalid longitude (-180 to 180)";
+            tempErrors.longitude = "Kinh độ không hợp lệ (-180 đến 180)";
         }
-        if (!formData.address) tempErrors.address = "Address is required";
-        if (!formData.status) tempErrors.status = "Status is required";
+        if (!formData.address) tempErrors.address = "Địa chỉ là bắt buộc";
+        if (!formData.status) tempErrors.status = "Trạng thái là bắt buộc";
         if (
             !formData.speed ||
             isNaN(Number(formData.speed)) ||
             Number(formData.speed) <= 0
         ) {
-            tempErrors.speed = "Invalid speed value";
+            tempErrors.speed = "Giá trị tốc độ không hợp lệ";
         }
         setErrors(tempErrors);
         return Object.keys(tempErrors).length === 0;
@@ -127,13 +127,13 @@ const EditVessel: React.FC = () => {
                     <div className="flex items-center mb-6">
                         <FaShip className="h-8 w-8 text-blue-600 mr-3" />
                         <h1 className="text-2xl font-bold text-gray-900">
-                            Edit Vessel: {vesselId}
+                            Chỉnh sửa tàu: {vesselId}
                         </h1>
                     </div>
 
                     {showSuccess && (
                         <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-md">
-                            Vessel edited successfully!
+                            Cập nhật tàu thành công!
                         </div>
                     )}
 
@@ -141,7 +141,7 @@ const EditVessel: React.FC = () => {
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Vessel Name
+                                    Tên tàu
                                 </label>
                                 <input
                                     type="text"
@@ -160,7 +160,7 @@ const EditVessel: React.FC = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    IMO Number
+                                    Số IMO
                                 </label>
                                 <input
                                     type="text"
@@ -180,7 +180,7 @@ const EditVessel: React.FC = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Latitude
+                                    Vĩ độ
                                 </label>
                                 <input
                                     type="number"
@@ -200,7 +200,7 @@ const EditVessel: React.FC = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Longitude
+                                    Kinh độ
                                 </label>
                                 <input
                                     type="number"
@@ -220,7 +220,7 @@ const EditVessel: React.FC = () => {
 
                             <div className="sm:col-span-2">
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Address
+                                    Địa chỉ
                                 </label>
                                 <textarea
                                     name="address"
@@ -239,7 +239,7 @@ const EditVessel: React.FC = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Status
+                                    Trạng thái
                                 </label>
                                 <select
                                     name="status"
@@ -247,11 +247,13 @@ const EditVessel: React.FC = () => {
                                     onChange={handleChange}
                                     className={`mt-1 block w-full rounded-md shadow-sm py-2 px-3 border ${errors.status ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                 >
-                                    <option value="">Select Status</option>
-                                    <option value="active">Active</option>
-                                    <option value="inactive">Inactive</option>
+                                    <option value="">Chọn trạng thái</option>
+                                    <option value="active">Hoạt động</option>
+                                    <option value="inactive">
+                                        Không hoạt động
+                                    </option>
                                     <option value="maintenance">
-                                        Under Maintenance
+                                        Đang bảo trì
                                     </option>
                                 </select>
                                 {errors.status && (
@@ -264,7 +266,7 @@ const EditVessel: React.FC = () => {
 
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Speed (knots)
+                                    Tốc độ (hải lý)
                                 </label>
                                 <input
                                     type="number"
@@ -284,7 +286,7 @@ const EditVessel: React.FC = () => {
 
                             <div className="sm:col-span-2">
                                 <label className="block text-sm font-medium text-gray-700">
-                                    Description
+                                    Mô tả
                                 </label>
                                 <textarea
                                     name="description"
@@ -302,13 +304,13 @@ const EditVessel: React.FC = () => {
                                 onClick={handleCancel}
                                 className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                Cancel
+                                Hủy bỏ
                             </button>
                             <button
                                 type="submit"
                                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                Save
+                                Lưu thay đổi
                             </button>
                         </div>
                     </form>
