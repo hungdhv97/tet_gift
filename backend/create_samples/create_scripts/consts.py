@@ -144,4 +144,10 @@ users_data = [
         "role": "crew",
         "is_active": False,
     },
+    {
+        "username": "haidoi2",
+        "password": "1234",
+        "role": "admin",
+        "is_active": True,
+    },
 ]

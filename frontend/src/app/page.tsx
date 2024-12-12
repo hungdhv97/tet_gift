@@ -1,7 +1,8 @@
 "use client";
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
-import { FaChevronDown, FaLock, FaUser } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { FaLock, FaUser } from "react-icons/fa";
 
 interface FormData {
     username: string;
@@ -15,12 +16,9 @@ const LoginPage: React.FC = () => {
         password: "",
         rememberMe: false,
     });
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-    const [selectedRole, setSelectedRole] = useState<string>("");
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
-
-    const roles: string[] = ["User", "Admin", "Manager", "Supervisor"];
+    const router = useRouter();
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value, type, checked } = e.target;
@@ -36,29 +34,17 @@ const LoginPage: React.FC = () => {
         setSuccess("");
 
         if (!formData.username || !formData.password) {
-            setError("Please fill in all fields");
+            setError("Vui lòng điền đầy đủ thông tin");
             return;
         }
 
         setTimeout(() => {
-            if (formData.username === "demo" && formData.password === "password") {
-                setSuccess("Login successful!");
-                setIsLoggedIn(true);
+            if (formData.username === "haidoi2" && formData.password === "1234") {
+                router.push("/dashboard");
             } else {
-                setError("Invalid credentials");
+                setError("Thông tin đăng nhập không hợp lệ");
             }
-        }, 1000);
-    };
-
-    const handleRoleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-        const role = e.target.value;
-        setSelectedRole(role);
-        if (role === "Admin") {
-            setError("Admin role not accessible");
-            setSelectedRole("");
-        } else {
-            setSuccess(`Role selected: ${role}`);
-        }
+        }, 100);
     };
 
     return (
@@ -71,79 +57,57 @@ const LoginPage: React.FC = () => {
                     <div className="max-w-md mx-auto">
                         <div className="divide-y divide-gray-200">
                             <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                                <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Welcome Back</h1>
+                                <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Chào mừng trở lại</h1>
 
-                                {!isLoggedIn ? (
-                                    <form onSubmit={handleSubmit} className="space-y-6">
-                                        <div className="relative">
-                                            <div
-                                                className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <FaUser className="text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="text"
-                                                name="username"
-                                                placeholder="Username or Email"
-                                                value={formData.username}
-                                                onChange={handleInputChange}
-                                                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                            />
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div className="relative">
+                                        <div
+                                            className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <FaUser className="text-gray-400" />
                                         </div>
-
-                                        <div className="relative">
-                                            <div
-                                                className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <FaLock className="text-gray-400" />
-                                            </div>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                placeholder="Password"
-                                                value={formData.password}
-                                                onChange={handleInputChange}
-                                                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                            />
-                                        </div>
-
-                                        <div className="flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                name="rememberMe"
-                                                checked={formData.rememberMe}
-                                                onChange={handleInputChange}
-                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                            />
-                                            <label className="ml-2 block text-sm text-gray-700">Remember me</label>
-                                        </div>
-
-                                        <button
-                                            type="submit"
-                                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                                        >
-                                            Sign in
-                                        </button>
-                                    </form>
-                                ) : (
-                                    <div className="space-y-6">
-                                        <label className="block text-sm font-medium text-gray-700">Select Role</label>
-                                        <div className="relative">
-                                            <select
-                                                value={selectedRole}
-                                                onChange={handleRoleSelect}
-                                                className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                                            >
-                                                <option value="">Choose a role</option>
-                                                {roles.map((role) => (
-                                                    <option key={role} value={role}>{role}</option>
-                                                ))}
-                                            </select>
-                                            <div
-                                                className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                                <FaChevronDown className="text-gray-400" />
-                                            </div>
-                                        </div>
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            placeholder="Tên người dùng hoặc Email"
+                                            value={formData.username}
+                                            onChange={handleInputChange}
+                                            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        />
                                     </div>
-                                )}
+
+                                    <div className="relative">
+                                        <div
+                                            className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <FaLock className="text-gray-400" />
+                                        </div>
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            placeholder="Mật khẩu"
+                                            value={formData.password}
+                                            onChange={handleInputChange}
+                                            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                        />
+                                    </div>
+
+                                    <div className="flex items-center">
+                                        <input
+                                            type="checkbox"
+                                            name="rememberMe"
+                                            checked={formData.rememberMe}
+                                            onChange={handleInputChange}
+                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                        />
+                                        <label className="ml-2 block text-sm text-gray-700">Ghi nhớ</label>
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    >
+                                        Đăng nhập
+                                    </button>
+                                </form>
 
                                 {error && (
                                     <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
