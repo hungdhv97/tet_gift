@@ -1,0 +1,17 @@
+services:
+  postgresql:
+    image: postgres
+    container_name: postgresql
+    environment:
+      POSTGRES_DB: ubuntu
+      POSTGRES_USER: ubuntu
+      POSTGRES_PASSWORD: 123456
+      POSTGRESQL_LOG_MIN_MESSAGES: FATAL
+      POSTGRESQL_LOG_STATEMENT: none
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data/
+
+volumes:
+  postgresql_data:

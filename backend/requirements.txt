@@ -1,0 +1,14 @@
+django
+djangorestframework
+django-cors
+psycopg2-binary
+python-dotenv
+gunicorn
+Pillow
+django-cors-headers
+dj-rest-auth[with_social]
+djangorestframework-simplejwt
+django-ckeditor-5
+redis[hiredis]
+attrs
+black

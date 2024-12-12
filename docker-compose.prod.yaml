@@ -1,0 +1,77 @@
+services:
+  xoai_shop_backend:
+    build:
+      context: ./backend
+    container_name: xoai_shop_backend
+    image: xoai_shop_backend
+    depends_on:
+      xoai_shop_postgresql:
+        condition: service_healthy
+      xoai_shop_redis:
+        condition: service_started
+    environment:
+      POSTGRES_DB: ubuntu
+      POSTGRES_USER: ubuntu
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_HOST: 192.233.84.195
+      POSTGRES_PORT: 5432
+      FRONTEND_URL: https://www.xoai.shop
+      REDIS_HOST: xoai_shop_redis
+      REDIS_PORT: 6379
+      REDIS_DATABASE: 1
+    command: >
+      sh -c "
+      python manage.py migrate &&
+      python create_samples/main.py &&
+      gunicorn backend.wsgi --bind 0.0.0.0:8000 --workers 4 --access-logfile - --error-logfile -
+      "
+    volumes:
+      - backend_static:/app/static
+      - backend_media:/app/media
+    networks:
+      - nginx_network
+
+  xoai_shop_frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_API_URL: "https://backend.xoai.shop"
+    image: xoai_shop_frontend
+    container_name: xoai_shop_frontend
+    networks:
+      - nginx_network
+
+  xoai_shop_postgresql:
+    image: postgres
+    container_name: xoai_shop_postgresql
+    environment:
+      POSTGRES_DB: ubuntu
+      POSTGRES_USER: ubuntu
+      POSTGRES_PASSWORD: 123456
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data/
+    networks:
+      - nginx_network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  xoai_shop_redis:
+    image: redis
+    container_name: xoai_shop_redis
+    volumes:
+      - redis_data:/data
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+  postgresql_data:
+  backend_static:
+  backend_media:
+  redis_data:

@@ -1,0 +1,7 @@
+.idea
+venv
+backend/media
+backend/static
+*.env
+
+__pycache__/
