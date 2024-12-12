@@ -14,6 +14,7 @@ services:
     command: >
       sh -c "
       python manage.py migrate &&
+      python create_samples/main.py &&
       gunicorn backend.wsgi --bind 0.0.0.0:8000 --workers 4 --access-logfile - --error-logfile -
       "
     volumes:
