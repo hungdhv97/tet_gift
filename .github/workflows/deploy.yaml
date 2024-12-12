@@ -1,20 +1,20 @@
-#name: Deploy to VPS
-#
-#on:
-#  push:
-#    branches:
-#      - '**'
-#
-#jobs:
-#  deploy:
-#    runs-on: self-hosted
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Build and deploy
-#        run: |
-#          cd ${{ github.workspace }}
-#          docker compose -f docker-compose.prod.yaml down --rmi local
-#          docker compose -f docker-compose.prod.yaml up -d --build
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and deploy
+        run: |
+          cd ${{ github.workspace }}
+          docker compose -f docker-compose.prod.yaml down --rmi local
+          docker compose -f docker-compose.prod.yaml up -d --build

@@ -1,13 +1,13 @@
 services:
-  xoai_shop_backend:
+  vessel_tracking_backend:
     build:
       context: ./backend
-    container_name: xoai_shop_backend
-    image: xoai_shop_backend
+    container_name: vessel_tracking_backend
+    image: vessel_tracking_backend
     depends_on:
-      xoai_shop_postgresql:
+      vessel_tracking_postgresql:
         condition: service_healthy
-      xoai_shop_redis:
+      vessel_tracking_redis:
         condition: service_started
     environment:
       POSTGRES_DB: vessel_tracking
@@ -16,7 +16,7 @@ services:
       POSTGRES_HOST: 192.233.84.195
       POSTGRES_PORT: 5432
       FRONTEND_URL: https://www.quanlytauca.site
-      REDIS_HOST: xoai_shop_redis
+      REDIS_HOST: vessel_tracking_redis
       REDIS_PORT: 6379
       REDIS_DATABASE: 1
     command: >
@@ -30,13 +30,13 @@ services:
     networks:
       - nginx_network
 
-  xoai_shop_frontend:
+  vessel_tracking_frontend:
     build:
       context: ./frontend
       args:
         NEXT_PUBLIC_API_URL: "https://backend.quanlytauca.site"
-    image: xoai_shop_frontend
-    container_name: xoai_shop_frontend
+    image: vessel_tracking_frontend
+    container_name: vessel_tracking_frontend
     networks:
       - nginx_network
 
