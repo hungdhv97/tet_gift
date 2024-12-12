@@ -1,14 +1,11 @@
-from django.urls import (
-    include,
-    path,
-)
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 
-from .views import PositionHistoryViewSet
-
-router = DefaultRouter()
-router.register(r"positions", PositionHistoryViewSet)
+from .views import UpdateVesselPositionAPIView
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path(
+        "update-position/",
+        UpdateVesselPositionAPIView.as_view(),
+        name="update-vessel-position",
+    ),
 ]
