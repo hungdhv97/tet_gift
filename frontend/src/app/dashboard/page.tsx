@@ -164,15 +164,25 @@ const VesselManagementDashboard: React.FC = () => {
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <div className="flex justify-between items-center mb-4">
                         <h2 className="text-xl font-bold">Danh Sách Tàu</h2>
-                        <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm tàu..."
-                                className="pl-10 pr-4 py-2 border rounded-lg"
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
-                            />
-                            <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                        <div className="flex items-center space-x-4">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                                onClick={() => router.push("/vessels/add")}
+                            >
+                                Thêm Tàu
+                            </button>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Tìm kiếm tàu..."
+                                    className="pl-10 pr-4 py-2 border rounded-lg"
+                                    value={searchTerm}
+                                    onChange={e =>
+                                        setSearchTerm(e.target.value)
+                                    }
+                                />
+                                <FaSearch className="absolute left-3 top-3 text-gray-400" />
+                            </div>
                         </div>
                     </div>
                     <div className="overflow-x-auto">

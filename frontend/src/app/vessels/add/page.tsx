@@ -3,7 +3,6 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { FaShip } from "react-icons/fa";
 import { AiOutlineWarning } from "react-icons/ai";
-import { useParams } from "next/navigation";
 
 interface FormData {
     name: string;
@@ -16,9 +15,7 @@ interface FormData {
     speed: string;
 }
 
-const EditVessel: React.FC = () => {
-    const params = useParams<{ vesselId: string }>();
-    const vesselId = params.vesselId;
+const AddVessel: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         name: "",
         imoNumber: "",
@@ -127,13 +124,13 @@ const EditVessel: React.FC = () => {
                     <div className="flex items-center mb-6">
                         <FaShip className="h-8 w-8 text-blue-600 mr-3" />
                         <h1 className="text-2xl font-bold text-gray-900">
-                            Edit Vessel: {vesselId}
+                            Add New Vessel
                         </h1>
                     </div>
 
                     {showSuccess && (
                         <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-md">
-                            Vessel edited successfully!
+                            Vessel added successfully!
                         </div>
                     )}
 
@@ -308,7 +305,7 @@ const EditVessel: React.FC = () => {
                                 type="submit"
                                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                Save
+                                Add Vessel
                             </button>
                         </div>
                     </form>
@@ -318,4 +315,4 @@ const EditVessel: React.FC = () => {
     );
 };
 
-export default EditVessel;
+export default AddVessel;
