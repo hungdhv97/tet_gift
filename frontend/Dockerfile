@@ -5,7 +5,7 @@ ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
 COPY package.json package-lock.json ./
-RUN npm install && npm cache clean --force
+RUN npm install --force && npm cache clean --force
 
 COPY . .
 RUN npm run build

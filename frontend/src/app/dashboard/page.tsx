@@ -19,7 +19,7 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 interface Ship {
     id: number;
     name: string;
-    status: "In Transit" | "Docked";
+    status: "Đang Vận Chuyển" | "Đã Cập Bến";
     location: string;
     coordinates: [number, number];
     image: string;
@@ -35,24 +35,24 @@ const ShipManagementDashboard: React.FC = () => {
         {
             id: 1,
             name: "Ocean Explorer",
-            status: "In Transit",
-            location: "Atlantic Ocean",
+            status: "Đang Vận Chuyển",
+            location: "Đại Tây Dương",
             coordinates: [25.7617, -80.1918],
             image: "https://images.unsplash.com/photo-1566887129867-33e9d4f23087",
         },
         {
             id: 2,
             name: "Caribbean Princess",
-            status: "Docked",
-            location: "Miami Port",
+            status: "Đã Cập Bến",
+            location: "Cảng Miami",
             coordinates: [25.7742, -80.1850],
             image: "https://images.unsplash.com/photo-1589458223095-8e38f1875994",
         },
         {
             id: 3,
             name: "Pacific Voyager",
-            status: "In Transit",
-            location: "Pacific Ocean",
+            status: "Đang Vận Chuyển",
+            location: "Thái Bình Dương",
             coordinates: [37.7749, -122.4194],
             image: "https://images.unsplash.com/photo-1599008633840-052c7f756385",
         },
@@ -63,12 +63,12 @@ const ShipManagementDashboard: React.FC = () => {
     }, []);
 
     const pieChartData = {
-        labels: ["In Transit", "Docked"],
+        labels: ["Đang Vận Chuyển", "Đã Cập Bến"],
         datasets: [
             {
                 data: [
-                    ships.filter(ship => ship.status === "In Transit").length,
-                    ships.filter(ship => ship.status === "Docked").length,
+                    ships.filter(ship => ship.status === "Đang Vận Chuyển").length,
+                    ships.filter(ship => ship.status === "Đã Cập Bến").length,
                 ],
                 backgroundColor: ["#3B82F6", "#10B981"],
                 borderColor: ["#2563EB", "#059669"],
@@ -77,10 +77,10 @@ const ShipManagementDashboard: React.FC = () => {
     };
 
     const lineChartData = {
-        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
         datasets: [
             {
-                label: "Ships in Transit",
+                label: "Tàu Đang Vận Chuyển",
                 data: [4, 3, 5, 4, 6, 5],
                 borderColor: "#3B82F6",
                 tension: 0.1,
@@ -106,7 +106,7 @@ const ShipManagementDashboard: React.FC = () => {
             <div className="max-w-7xl mx-auto">
                 {/* Dashboard Header */}
                 <div className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800">Ship Management Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-gray-800">Bảng Điều Khiển Quản Lý Tàu</h1>
                 </div>
 
                 {/* Summary Cards */}
@@ -115,7 +115,7 @@ const ShipManagementDashboard: React.FC = () => {
                         <div className="flex items-center">
                             <FaShip className="text-blue-500 text-3xl mr-4" />
                             <div>
-                                <p className="text-gray-500">Total Ships</p>
+                                <p className="text-gray-500">Tổng Số Tàu</p>
                                 <p className="text-2xl font-bold">{ships.length}</p>
                             </div>
                         </div>
@@ -124,9 +124,9 @@ const ShipManagementDashboard: React.FC = () => {
                         <div className="flex items-center">
                             <FaAnchor className="text-green-500 text-3xl mr-4" />
                             <div>
-                                <p className="text-gray-500">Ships Docked</p>
+                                <p className="text-gray-500">Tàu Đã Cập Bến</p>
                                 <p className="text-2xl font-bold">
-                                    {ships.filter(ship => ship.status === "Docked").length}
+                                    {ships.filter(ship => ship.status === "Đã Cập Bến").length}
                                 </p>
                             </div>
                         </div>
@@ -135,9 +135,9 @@ const ShipManagementDashboard: React.FC = () => {
                         <div className="flex items-center">
                             <FaShip className="text-blue-500 text-3xl mr-4" />
                             <div>
-                                <p className="text-gray-500">Ships in Transit</p>
+                                <p className="text-gray-500">Tàu Đang Vận Chuyển</p>
                                 <p className="text-2xl font-bold">
-                                    {ships.filter(ship => ship.status === "In Transit").length}
+                                    {ships.filter(ship => ship.status === "Đang Vận Chuyển").length}
                                 </p>
                             </div>
                         </div>
@@ -147,13 +147,13 @@ const ShipManagementDashboard: React.FC = () => {
                 {/* Charts */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                     <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-xl font-bold mb-4">Ship Status Distribution</h2>
+                        <h2 className="text-xl font-bold mb-4">Phân Phối Trạng Thái Tàu</h2>
                         <div className="h-64">
                             <Pie data={pieChartData} />
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-xl font-bold mb-4">Monthly Transit Trends</h2>
+                        <h2 className="text-xl font-bold mb-4">Xu Hướng Vận Chuyển Hàng Tháng</h2>
                         <div className="h-64">
                             <Line data={lineChartData} />
                         </div>
@@ -163,11 +163,11 @@ const ShipManagementDashboard: React.FC = () => {
                 {/* Ship List */}
                 <div className="bg-white p-6 rounded-lg shadow mb-8">
                     <div className="flex justify-between items-center mb-4">
-                        <h2 className="text-xl font-bold">Ship List</h2>
+                        <h2 className="text-xl font-bold">Danh Sách Tàu</h2>
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Search ships..."
+                                placeholder="Tìm kiếm tàu..."
                                 className="pl-10 pr-4 py-2 border rounded-lg"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -179,10 +179,16 @@ const ShipManagementDashboard: React.FC = () => {
                         <table className="w-full">
                             <thead>
                             <tr className="bg-gray-50">
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ship</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tàu</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng
+                                    Thái
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vị
+                                    Trí
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hành
+                                    Động
+                                </th>
                             </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
@@ -203,7 +209,7 @@ const ShipManagementDashboard: React.FC = () => {
                                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                              ship.status === "In Transit"
+                              ship.status === "Đang Vận Chuyển"
                                   ? "bg-blue-100 text-blue-800"
                                   : "bg-green-100 text-green-800"
                           }`}
@@ -237,9 +243,9 @@ const ShipManagementDashboard: React.FC = () => {
 
                 {/* Map Placeholder */}
                 <div className="bg-white p-6 rounded-lg shadow">
-                    <h2 className="text-xl font-bold mb-4">Real-time Tracking</h2>
+                    <h2 className="text-xl font-bold mb-4">Theo Dõi Thời Gian Thực</h2>
                     <div className="h-96 bg-gray-100 flex items-center justify-center">
-                        <p className="text-gray-500">Map Component Placeholder</p>
+                        <p className="text-gray-500">Đang Xây Dựng Thành Phần Bản Đồ</p>
                     </div>
                 </div>
             </div>
@@ -248,10 +254,10 @@ const ShipManagementDashboard: React.FC = () => {
             {isModalOpen && selectedShip && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
                     <div className="bg-white rounded-lg p-8 max-w-md w-full">
-                        <h2 className="text-xl font-bold mb-4">Edit Ship Details</h2>
+                        <h2 className="text-xl font-bold mb-4">Chỉnh Sửa Chi Tiết Tàu</h2>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
-                                Ship Name
+                                Tên Tàu
                             </label>
                             <input
                                 type="text"
@@ -262,7 +268,7 @@ const ShipManagementDashboard: React.FC = () => {
                         </div>
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2">
-                                Status
+                                Trạng Thái
                             </label>
                             <select
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
@@ -270,12 +276,12 @@ const ShipManagementDashboard: React.FC = () => {
                                 onChange={(e) =>
                                     setSelectedShip({
                                         ...selectedShip,
-                                        status: e.target.value as "In Transit" | "Docked",
+                                        status: e.target.value as "Đang Vận Chuyển" | "Đã Cập Bến",
                                     })
                                 }
                             >
-                                <option value="In Transit">In Transit</option>
-                                <option value="Docked">Docked</option>
+                                <option value="Đang Vận Chuyển">Đang Vận Chuyển</option>
+                                <option value="Đã Cập Bến">Đã Cập Bến</option>
                             </select>
                         </div>
                         <div className="flex justify-end">
@@ -283,13 +289,13 @@ const ShipManagementDashboard: React.FC = () => {
                                 onClick={() => setIsModalOpen(false)}
                                 className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2"
                             >
-                                Cancel
+                                Hủy
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
                                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                             >
-                                Save Changes
+                                Lưu Thay Đổi
                             </button>
                         </div>
                     </div>
