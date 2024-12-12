@@ -22,6 +22,7 @@ services:
     networks:
       - nginx_network
 
+
   vessel_tracking_frontend:
     build:
       context: ./frontend
