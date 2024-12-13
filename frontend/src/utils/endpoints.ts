@@ -43,14 +43,14 @@ export const ENDPOINTS = {
     DELETE: {
         REMOVE_CART_ITEM: (cartItemId: number) =>
             `api/carts/cart-items/${cartItemId}/`,
-        REMOVE_REVIEW: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
+        REMOVE_VESSEL: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
         REMOVE_RECEIVER: (receiverId: number) =>
             `api/receivers/receivers/${receiverId}/`,
     },
     PATCH: {
         UPDATE_CART_ITEM_QUANTITY: (cartItemId: number) =>
             `api/carts/cart-items/${cartItemId}/`,
-        UPDATE_REVIEW: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
+        UPDATE_VESSEL: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
         UPDATE_PROFILE: `api/users/profile/update/`,
         UPDATE_USERNAME: `api/auths/user/`,
         UPDATE_RECEIVER: (receiverId: number) =>

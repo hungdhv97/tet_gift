@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axiosInstance from "@/utils/axiosConfig";
 import { ENDPOINTS } from "@/utils/endpoints";
+import { axiosInstanceWithToken } from "@/utils/axiosConfig";
 
 interface AddVesselPayload {
     name: string;
@@ -31,7 +31,7 @@ export const useFetchVessels = () => {
     return useQuery<VesselResponse[], Error>({
         queryKey: ["vessels"],
         queryFn: async () => {
-            const { data } = await axiosInstance.get<VesselResponse[]>(
+            const { data } = await axiosInstanceWithToken.get<VesselResponse[]>(
                 ENDPOINTS.GET.VESSELS,
             );
             return data;
@@ -44,7 +44,7 @@ export const useAddVessel = () => {
 
     return useMutation<VesselResponse, Error, AddVesselPayload>({
         mutationFn: async (payload) => {
-            const { data } = await axiosInstance.post<VesselResponse>(
+            const { data } = await axiosInstanceWithToken.post<VesselResponse>(
                 ENDPOINTS.POST.ADD_VESSEL,
                 payload,
             );
@@ -63,8 +63,8 @@ export const useUpdateVessel = () => {
 
     return useMutation<VesselResponse, Error, UpdateVesselPayload>({
         mutationFn: async ({ vesselId, ...payload }) => {
-            const { data } = await axiosInstance.patch<VesselResponse>(
-                ENDPOINTS.PATCH.UPDATE_REVIEW(vesselId),
+            const { data } = await axiosInstanceWithToken.patch<VesselResponse>(
+                ENDPOINTS.PATCH.UPDATE_VESSEL(vesselId),
                 payload,
             );
             return data;
@@ -82,8 +82,8 @@ export const useDeleteVessel = () => {
 
     return useMutation<void, Error, DeleteVesselPayload>({
         mutationFn: async ({ vesselId }) => {
-            await axiosInstance.delete(
-                ENDPOINTS.DELETE.REMOVE_REVIEW(vesselId),
+            await axiosInstanceWithToken.delete(
+                ENDPOINTS.DELETE.REMOVE_VESSEL(vesselId),
             );
         },
         onSuccess: (data, variables) => {

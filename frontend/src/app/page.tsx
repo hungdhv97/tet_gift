@@ -3,7 +3,8 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaLock, FaUser } from "react-icons/fa";
-import { useLogin } from "@/queries/auth";
+
+import { useLogin } from "@/queries/user";
 
 interface FormData {
     username: string;
