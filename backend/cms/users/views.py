@@ -1,46 +1,46 @@
 from rest_framework import (
     status,
-    viewsets,
+    views,
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User
-from .serializers import (
+from cms.users.serializers import (
     LoginSerializer,
+    RegisterSerializer,
     UserSerializer,
 )
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class RegisterView(views.APIView):
+    def post(self, request):
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LoginAPIView(APIView):
-    def post(self, request, *args, **kwargs):
+class LoginView(views.APIView):
+    def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data["user"]
+            user = serializer.validated_data
             refresh = RefreshToken.for_user(user)
             return Response(
                 {
-                    "username": user.username,
-                    "role": user.role,
-                    "refresh_token": str(refresh),
-                    "access_token": str(refresh.access_token),
-                },
-                status=status.HTTP_200_OK,
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token),
+                    "user": UserSerializer(user).data,
+                }
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GetCurrentUserAPIView(APIView):
+class MeView(views.APIView):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         user = request.user
-        serializer = UserSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)

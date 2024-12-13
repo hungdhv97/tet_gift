@@ -1,42 +1,45 @@
-from rest_framework import serializers
+from django.contrib.auth import get_user_model
 
-from .models import User
+from rest_framework import (
+    serializers,
+)
+
+CustomUser = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = [
-            "id",
-            "username",
-            "password",
-            "role",
-            "is_active",
-            "created_at",
-            "updated_at",
-        ]
-        extra_kwargs = {"password": {"write_only": True}}
+        model = CustomUser
+        fields = ["id", "username", "email", "phone", "address", "role"]
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+
+    class Meta:
+        model = CustomUser
+        fields = ["username", "email", "password", "phone", "address", "role"]
 
     def create(self, validated_data):
-        return User.objects.create(**validated_data)
+        user = CustomUser.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data["email"],
+            phone=validated_data.get("phone"),
+            address=validated_data.get("address"),
+            role=validated_data.get("role", "user"),
+        )
+        user.set_password(validated_data["password"])
+        user.save()
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=150)
-    password = serializers.CharField(write_only=True, style={"input_type": "password"})
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data.get("username")
-        password = data.get("password")
-
-        try:
-            user = User.objects.get(username=username)
-            if user.password != password:
-                raise serializers.ValidationError("Invalid password.")
-            if not user.is_active:
-                raise serializers.ValidationError("User account is inactive.")
-        except User.DoesNotExist:
-            raise serializers.ValidationError("User with this username does not exist.")
-
-        data["user"] = user
-        return data
+        from django.contrib.auth import authenticate
+        user = authenticate(username=data["username"], password=data["password"])
+        if not user:
+            raise serializers.ValidationError("Invalid username or password")
+        return user
