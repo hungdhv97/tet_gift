@@ -5,7 +5,7 @@ import { FaEdit, FaSearch, FaTrash } from "react-icons/fa";
 import { useDeleteVessel, useFetchVessels } from "@/queries/vessel";
 import { useRouter } from "next/navigation";
 
-const VesselManagementDashboard: React.FC = () => {
+const VesselList: React.FC = () => {
     const { data: vessels } = useFetchVessels();
     const { mutate: deleteVessel } = useDeleteVessel();
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -118,4 +118,4 @@ const VesselManagementDashboard: React.FC = () => {
     );
 };
 
-export default VesselManagementDashboard;
+export default VesselList;

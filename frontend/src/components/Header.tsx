@@ -33,9 +33,7 @@ export function Header() {
                             <div className="text-sm sm:text-2xl text-center text-white">
                                 BẢNG ĐIỀU KHIỂN QUẢN LÝ TÀU THUYỀN
                                 <br />
-                                BỘ ĐỘI BIÊN PHÒNG
-                                <br />
-                                TỈNH NGHỆ AN
+                                BỘ ĐỘI BIÊN PHÒNG TỈNH NGHỆ AN
                             </div>
                         </button>
                     </Link>
