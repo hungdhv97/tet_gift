@@ -123,16 +123,7 @@ const EditVessel: React.FC = () => {
                 },
                 {
                     onSuccess: () => {
-                        setFormData({
-                            name: "",
-                            imoNumber: "",
-                            latitude: "",
-                            longitude: "",
-                            address: "",
-                            status: "",
-                            description: "",
-                            speed: "",
-                        });
+                        router.push("/vessels");
                     },
                 },
             );

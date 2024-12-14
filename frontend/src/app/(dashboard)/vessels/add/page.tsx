@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FaShip } from "react-icons/fa";
 import { AiOutlineWarning } from "react-icons/ai";
 import { useAddVessel } from "@/queries/vessel";
+import { toast } from "react-toastify";
 
 interface FormData {
     name: string;
@@ -105,6 +106,9 @@ const AddVessel: React.FC = () => {
             addVesselMutation.mutate(payload, {
                 onSuccess: () => {
                     router.push("/vessels");
+                },
+                onError: () => {
+                    toast.error("Không thể tạo dữ liệu");
                 },
             });
         }
