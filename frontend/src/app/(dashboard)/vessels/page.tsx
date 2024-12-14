@@ -14,7 +14,7 @@ const VesselList: React.FC = () => {
     if (!vessels) return null;
 
     const handleEdit = (vesselId: number) => {
-        router.push(`/vessels/${vesselId}`);
+        router.push(`/vessels/${vesselId}/edit`);
     };
 
     const handleDelete = (id: number) => {

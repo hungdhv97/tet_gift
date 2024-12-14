@@ -1,10 +1,7 @@
 export const ENDPOINTS = {
     GET: {
-        CART_FOR_USER: `api/carts/current_cart/`,
+        VESSEL: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
         VESSELS: `api/vessels/vessels/`,
-        PRODUCT: (productId: number) => `api/products/products/${productId}/`,
-        PRODUCT_VARIANT: (productVariantId: number) =>
-            `api/products/product-variants/${productVariantId}/`,
         PRODUCTS: `api/products/products/`,
         RELATED_PRODUCT: (productId: number) =>
             `api/products/products/related/${productId}/products/`,

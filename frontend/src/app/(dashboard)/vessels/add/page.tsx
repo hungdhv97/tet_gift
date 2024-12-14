@@ -94,12 +94,12 @@ const AddVessel: React.FC = () => {
             const payload = {
                 name: formData.name,
                 imo_number: formData.imoNumber,
-                latitude: parseFloat(formData.latitude),
-                longitude: parseFloat(formData.longitude),
+                latitude: formData.latitude,
+                longitude: formData.longitude,
                 address: formData.address,
                 status: formData.status,
                 description: formData.description || null,
-                speed: parseFloat(formData.speed),
+                speed: formData.speed,
             };
 
             addVesselMutation.mutate(payload, {
@@ -111,17 +111,7 @@ const AddVessel: React.FC = () => {
     };
 
     const handleCancel = () => {
-        setFormData({
-            name: "",
-            imoNumber: "",
-            latitude: "",
-            longitude: "",
-            address: "",
-            status: "",
-            description: "",
-            speed: "",
-        });
-        setErrors({});
+        router.push("/vessels");
     };
 
     return (
@@ -300,7 +290,7 @@ const AddVessel: React.FC = () => {
                                 onClick={handleCancel}
                                 className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                Huỷ Bỏ
+                                Trở về
                             </button>
                             <button
                                 type="submit"

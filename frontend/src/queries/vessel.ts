@@ -5,22 +5,24 @@ import { axiosInstanceWithToken } from "@/utils/axiosConfig";
 interface AddVesselPayload {
     name: string;
     imo_number: string;
-    latitude: number;
-    longitude: number;
+    latitude: string;
+    longitude: string;
+    status: string;
     address: string;
     description: string | null;
-    speed: number | null;
+    speed: string | null;
 }
 
 interface UpdateVesselPayload {
     vesselId: number;
     name: string | null;
     imo_number: string | null;
-    latitude: number | null;
-    longitude: number | null;
+    latitude: string | null;
+    longitude: string | null;
+    status: string;
     address: string | null;
     description: string | null;
-    speed: number | null;
+    speed: string | null;
 }
 
 interface DeleteVesselPayload {
@@ -33,6 +35,18 @@ export const useFetchVessels = () => {
         queryFn: async () => {
             const { data } = await axiosInstanceWithToken.get<VesselResponse[]>(
                 ENDPOINTS.GET.VESSELS,
+            );
+            return data;
+        },
+    });
+};
+
+export const useFetchVessel = (vesselId: number) => {
+    return useQuery<VesselResponse, Error>({
+        queryKey: ["vessels", vesselId],
+        queryFn: async () => {
+            const { data } = await axiosInstanceWithToken.get<VesselResponse>(
+                ENDPOINTS.GET.VESSEL(vesselId),
             );
             return data;
         },

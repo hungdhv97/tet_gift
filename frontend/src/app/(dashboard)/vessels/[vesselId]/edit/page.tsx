@@ -1,9 +1,10 @@
 "use client";
 
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaShip } from "react-icons/fa";
 import { AiOutlineWarning } from "react-icons/ai";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useFetchVessel, useUpdateVessel } from "@/queries/vessel";
 
 interface FormData {
     name: string;
@@ -18,7 +19,7 @@ interface FormData {
 
 const EditVessel: React.FC = () => {
     const params = useParams<{ vesselId: string }>();
-    const vesselId = params.vesselId;
+    const vesselId = parseInt(params.vesselId);
     const [formData, setFormData] = useState<FormData>({
         name: "",
         imoNumber: "",
@@ -29,9 +30,27 @@ const EditVessel: React.FC = () => {
         description: "",
         speed: "",
     });
-
+    const { data: vessel } = useFetchVessel(vesselId);
+    const updateVesselMutation = useUpdateVessel();
+    const router = useRouter();
     const [errors, setErrors] = useState<Partial<FormData>>({});
-    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (vessel) {
+            setFormData({
+                name: vessel.name || "",
+                imoNumber: vessel.imo_number || "",
+                latitude: vessel.latitude?.toString() || "",
+                longitude: vessel.longitude?.toString() || "",
+                address: vessel.address || "",
+                status: vessel.status || "",
+                description: vessel.description || "",
+                speed: vessel.speed?.toString() || "",
+            });
+        }
+    }, [vessel]);
+
+    if (!vessel) return null;
 
     const validateForm = (): boolean => {
         let tempErrors: Partial<FormData> = {};
@@ -90,34 +109,38 @@ const EditVessel: React.FC = () => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log("Form submitted:", formData);
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
-            setFormData({
-                name: "",
-                imoNumber: "",
-                latitude: "",
-                longitude: "",
-                address: "",
-                status: "",
-                description: "",
-                speed: "",
-            });
+            updateVesselMutation.mutate(
+                {
+                    vesselId,
+                    name: formData.name,
+                    latitude: formData.latitude,
+                    longitude: formData.longitude,
+                    address: formData.address,
+                    status: formData.status,
+                    description: formData.description,
+                    speed: formData.speed,
+                    imo_number: formData.imoNumber,
+                },
+                {
+                    onSuccess: () => {
+                        setFormData({
+                            name: "",
+                            imoNumber: "",
+                            latitude: "",
+                            longitude: "",
+                            address: "",
+                            status: "",
+                            description: "",
+                            speed: "",
+                        });
+                    },
+                },
+            );
         }
     };
 
     const handleCancel = () => {
-        setFormData({
-            name: "",
-            imoNumber: "",
-            latitude: "",
-            longitude: "",
-            address: "",
-            status: "",
-            description: "",
-            speed: "",
-        });
-        setErrors({});
+        router.push("/vessels");
     };
 
     return (
@@ -130,12 +153,6 @@ const EditVessel: React.FC = () => {
                             Chỉnh sửa tàu: {vesselId}
                         </h1>
                     </div>
-
-                    {showSuccess && (
-                        <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-md">
-                            Cập nhật tàu thành công!
-                        </div>
-                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -253,7 +270,7 @@ const EditVessel: React.FC = () => {
                                         Không hoạt động
                                     </option>
                                     <option value="maintenance">
-                                        Đang bảo trì
+                                        Bảo trì
                                     </option>
                                 </select>
                                 {errors.status && (
@@ -304,7 +321,7 @@ const EditVessel: React.FC = () => {
                                 onClick={handleCancel}
                                 className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                             >
-                                Hủy bỏ
+                                Trở về
                             </button>
                             <button
                                 type="submit"
