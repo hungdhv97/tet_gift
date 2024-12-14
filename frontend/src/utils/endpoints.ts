@@ -22,7 +22,7 @@ export const ENDPOINTS = {
         ORDER: (orderId: number) => `api/orders/orders/${orderId}/`,
     },
     POST: {
-        ADD_CART_ITEM: `api/carts/cart-items/`,
+        UPDATE_POSITION: `api/tracking/update-position/`,
         SYNCHRONIZE_CART: `api/carts/synchronize-cart/`,
         ADD_VESSEL: `api/vessels/vessels/`,
         LOGIN: `api/users/login/`,

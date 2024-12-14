@@ -4,7 +4,9 @@ import { axiosInstanceWithToken } from "@/utils/axiosConfig";
 
 interface AddVesselPayload {
     name: string;
-    imo_number: string;
+    registration_number: string;
+    captain_name: string;
+    captain_phone: string;
     latitude: string;
     longitude: string;
     status: string;
@@ -64,9 +66,14 @@ export const useAddVessel = () => {
             );
             return data;
         },
-        onSuccess: (data, variables) => {
+        onSuccess: async (data, variables) => {
             queryClient.invalidateQueries({
                 queryKey: ["vessels"],
+            });
+            await axiosInstanceWithToken.post(ENDPOINTS.POST.UPDATE_POSITION, {
+                vessel_id: data.id,
+                latitude: variables.latitude,
+                longitude: variables.longitude,
             });
         },
     });

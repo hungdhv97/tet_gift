@@ -88,7 +88,6 @@ const VesselManagementDashboard: React.FC = () => {
                     </div>
                 ))}
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                 <div className="bg-white p-6 rounded-lg shadow">
                     <h2 className="text-xl font-bold mb-4">Phân Phối Trạng Thái Tàu</h2>
