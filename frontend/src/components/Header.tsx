@@ -2,16 +2,28 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { HiLogout } from "react-icons/hi";
+import { HiLogout, HiMenu } from "react-icons/hi";
 import { useFetchUser } from "@/queries/user";
+import { useState } from "react";
+import { removeAccessToken } from "@/helpers/auth";
 
 export function Header() {
     const { data: user } = useFetchUser();
     const pathname = usePathname();
     const router = useRouter();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleLogout = () => {
-        router.push("/");
+        removeAccessToken();
+        router.push("/login");
+    };
+
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    const closeMobileMenu = () => {
+        setIsMobileMenuOpen(false);
     };
 
     const navLinks = [
@@ -21,7 +33,7 @@ export function Header() {
 
     return (
         <header className="bg-blue-800">
-            <div className="container sm:px-3 relative flex items-center justify-between p-4">
+            <div className="container sm:px-3 relative flex items-center justify-between">
                 <div className="flex items-center">
                     <Link href="/dashboard" className="flex items-center shrink">
                         <button className="bg-blue-800 p-2 flex flex-col items-center">
@@ -30,7 +42,7 @@ export function Header() {
                                 className="h-12 sm:h-16"
                                 alt="Logo"
                             />
-                            <div className="text-sm sm:text-2xl text-center text-white">
+                            <div className="text-xs tracking-tighter sm:text-2xl text-center text-white">
                                 BẢNG ĐIỀU KHIỂN QUẢN LÝ TÀU THUYỀN
                                 <br />
                                 BỘ ĐỘI BIÊN PHÒNG TỈNH NGHỆ AN
@@ -40,20 +52,47 @@ export function Header() {
                 </div>
                 <div className="flex items-center space-x-4">
                     {user && (
-                        <ul className="hidden md:flex space-x-4">
-                            {navLinks.map((link, index) => (
-                                <li key={index}>
-                                    <Link
-                                        href={link.href}
-                                        className={`text-white md:text-xl ${
-                                            pathname === link.href ? "font-bold" : ""
-                                        }`}
-                                    >
-                                        {link.text}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                        <>
+                            <ul className="hidden md:flex space-x-4">
+                                {navLinks.map((link, index) => (
+                                    <li key={index}>
+                                        <Link
+                                            href={link.href}
+                                            className={`text-white md:text-xl ${
+                                                pathname === link.href ? "font-bold" : ""
+                                            }`}
+                                        >
+                                            {link.text}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                            <button
+                                className="text-white md:hidden"
+                                onClick={toggleMobileMenu}
+                            >
+                                <HiMenu className="text-3xl" /> {/* Replaced menu icon */}
+                            </button>
+                            {isMobileMenuOpen && (
+                                <div className="absolute top-full -left-4 w-full bg-blue-700 text-white z-20">
+                                    <ul className="flex flex-col space-y-2 p-4">
+                                        {navLinks.map((link, index) => (
+                                            <li key={index}>
+                                                <Link
+                                                    href={link.href}
+                                                    className={`block ${
+                                                        pathname === link.href ? "font-bold" : ""
+                                                    }`}
+                                                    onClick={closeMobileMenu}
+                                                >
+                                                    {link.text}
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </>
                     )}
                     {user && (
                         <div className="flex items-center">
@@ -64,7 +103,7 @@ export function Header() {
                                     className="rounded-full w-10 h-10 cursor-pointer"
                                 />
                                 <div
-                                    className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-10">
+                                    className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-30">
                                     <div className="p-4">
                                         <span className="block text-lg">{user.username}</span>
                                         <span className="block truncate text-lg font-bold">{user.role}</span>
@@ -80,9 +119,6 @@ export function Header() {
                                 </div>
                             </div>
                         </div>
-                    )}
-                    {!user && (
-                        <button className="text-white md:hidden">☰</button>
                     )}
                 </div>
             </div>
