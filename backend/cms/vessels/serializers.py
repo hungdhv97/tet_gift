@@ -10,6 +10,8 @@ class VesselSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "registration_number",
+            "captain_name",
+            "captain_phone",
             "address",
             "status",
             "description",

@@ -16,9 +16,9 @@ interface AddVesselPayload {
 interface UpdateVesselPayload {
     vesselId: number;
     name: string | null;
-    imo_number: string | null;
-    latitude: string | null;
-    longitude: string | null;
+    registration_number: string | null;
+    captain_name: string | null;
+    captain_phone: string | null;
     status: string;
     address: string | null;
     description: string | null;
