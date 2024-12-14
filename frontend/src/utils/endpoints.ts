@@ -16,7 +16,7 @@ export const ENDPOINTS = {
         PAGED_ORDER: (params: string) => `api/orders/orders/filter/?${params}`,
         CATEGORY: (categorySlug: string) => `api/categories/${categorySlug}/`,
         CATEGORIES: `api/categories/`,
-        CURRENT_USER: `api/auths/user/`,
+        CURRENT_USER: `api/users/me/`,
         WISHLIST_FOR_USER: `api/wishlists/current_wishlist/`,
         META_INFO: `api/metas/meta_info/`,
         RECEIVERS_FOR_USER: `api/receivers/receivers/`,

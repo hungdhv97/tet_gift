@@ -3,5 +3,5 @@ type UserResponse = {
     username: string;
     email?: string;
     phone?: string;
-    role?: string;
+    role: string;
 };
