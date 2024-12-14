@@ -28,20 +28,21 @@ const VesselList: React.FC = () => {
     return (
         <div className="container">
             <div className="bg-white p-6 rounded-lg shadow">
-                <div className="flex justify-between items-center mb-4">
+                <div
+                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-4 sm:space-y-0">
                     <h2 className="text-xl font-bold">Danh Sách Tàu</h2>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
                         <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full sm:w-auto"
                             onClick={() => router.push("/vessels/add")}
                         >
                             Thêm tàu
                         </button>
-                        <div className="relative">
+                        <div className="relative w-full sm:w-auto">
                             <input
                                 type="text"
                                 placeholder="Tìm kiếm tàu..."
-                                className="pl-10 pr-4 py-2 border rounded-lg"
+                                className="pl-10 pr-4 py-2 border rounded-lg w-full sm:w-auto"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
