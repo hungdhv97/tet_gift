@@ -9,7 +9,9 @@ export default function RootLayout({
     return (
         <section className="flex min-h-screen flex-col justify-between">
             <Header />
-            <div className="flex-1 relative">{children}</div>
+            <div className="flex-1 bg-gray-100 py-4 relative">
+                {children}
+            </div>
             <Footer />
         </section>
 

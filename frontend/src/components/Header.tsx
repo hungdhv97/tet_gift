@@ -16,7 +16,7 @@ export function Header() {
 
     const navLinks = [
         { href: "/introduction", text: "Giới thiệu" },
-        { href: "/image", text: "Tin tức - Sự kiện" },
+        { href: "/vessels", text: "Danh sách tàu thuyền" },
     ];
 
     return (
@@ -31,6 +31,8 @@ export function Header() {
                                 alt="Logo"
                             />
                             <div className="text-sm sm:text-2xl text-center text-white">
+                                BẢNG ĐIỀU KHIỂN QUẢN LÝ TÀU THUYỀN
+                                <br />
                                 BỘ ĐỘI BIÊN PHÒNG
                                 <br />
                                 TỈNH NGHỆ AN
