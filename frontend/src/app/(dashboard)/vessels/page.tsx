@@ -25,6 +25,17 @@ const VesselList: React.FC = () => {
         vessel.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
+    const statusMapping: Record<string, {
+        text: string;
+        color: string;
+    }> = {
+        "active": { text: "Hoạt động", color: "bg-green-100 text-green-800" },
+        "inactive": { text: "Không hoạt động", color: "bg-red-100 text-red-800" },
+        "warning": { text: "Cảnh báo", color: "bg-yellow-100 text-yellow-800" },
+        "maintenance": { text: "Bảo trì", color: "bg-blue-100 text-blue-800" },
+        "sunk": { text: "Chìm", color: "bg-gray-100 text-gray-800" },
+    };
+
     return (
         <div className="container">
             <div className="bg-white p-6 rounded-lg shadow">
@@ -81,18 +92,10 @@ const VesselList: React.FC = () => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span
                                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                            vessel.status === "active"
-                                                ? "bg-blue-100 text-blue-800"
-                                                : vessel.status === "inactive"
-                                                    ? "bg-red-100 text-red-800"
-                                                    : "bg-green-100 text-green-800"
+                                            statusMapping[vessel.status].color
                                         }`}
                                     >
-                                        {vessel.status === "active"
-                                            ? "Hoạt động"
-                                            : vessel.status === "inactive"
-                                                ? "Không hoạt động"
-                                                : "Bảo trì"}
+                                        {statusMapping[vessel.status].text}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

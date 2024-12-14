@@ -6,4 +6,4 @@ from .models import PositionHistory
 class PositionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = PositionHistory
-        fields = ["id", "vessel", "latitude", "longitude", "timestamp"]
+        fields = ["id", "vessel", "latitude", "longitude", "created_at"]

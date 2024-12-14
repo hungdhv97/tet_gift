@@ -7,13 +7,13 @@ from .models import Vessel
 class VesselAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "imo_number",
-        "latitude",
-        "longitude",
+        "registration_number",
         "address",
+        "captain_name",
+        "captain_phone",
         "status",
         "created_at",
         "updated_at",
     )
     list_filter = ("status",)
-    search_fields = ("name", "imo_number")
+    search_fields = ("name", "registration_number", "captain_name", "captain_phone")

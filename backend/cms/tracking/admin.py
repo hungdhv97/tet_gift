@@ -5,5 +5,5 @@ from .models import PositionHistory
 
 @admin.register(PositionHistory)
 class PositionHistoryAdmin(admin.ModelAdmin):
-    list_display = ("vessel", "latitude", "longitude", "timestamp")
-    list_filter = ("vessel", "timestamp")
+    list_display = ("vessel", "latitude", "longitude", "created_at")
+    list_filter = ("vessel", "created_at")

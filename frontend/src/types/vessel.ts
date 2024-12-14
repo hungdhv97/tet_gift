@@ -1,9 +1,9 @@
 type VesselResponse = {
     id: number;
     name: string;
-    imo_number: string;
-    latitude: number;
-    longitude: number;
+    registration_number: string;
+    captain_name: string;
+    captain_phone: string;
     address: string;
     status: string;
     description: string;

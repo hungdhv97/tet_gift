@@ -26,10 +26,14 @@ class UpdateVesselPositionAPIView(APIView):
                 {
                     "type": "send_update",
                     "message": {
-                        "vessel_id": vessel_id,
-                        "vessel_name": vessel.name,
+                        "name": vessel.name,
+                        "status": vessel.status,
+                        "registration_number": vessel.registration_number,
+                        "captain_name": vessel.captain_name,
+                        "captain_phone": vessel.captain_phone,
                         "latitude": latitude,
                         "longitude": longitude,
+                        "created_at": vessel.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                     },
                 },
             )

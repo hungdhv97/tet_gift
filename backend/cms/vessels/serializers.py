@@ -9,9 +9,7 @@ class VesselSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "imo_number",
-            "latitude",
-            "longitude",
+            "registration_number",
             "address",
             "status",
             "description",

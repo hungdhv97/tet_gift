@@ -9,7 +9,7 @@ class PositionHistory(models.Model):
     )
     latitude = models.FloatField()
     longitude = models.FloatField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.vessel.name} at {self.latitude}, {self.longitude}"

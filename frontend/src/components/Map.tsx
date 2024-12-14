@@ -4,58 +4,175 @@ import { useEffect, useState } from "react";
 import L from "leaflet";
 import io from "socket.io-client";
 
-interface Vessel {
-    vessel_id: string;
-    name: string;
-    latitude: number;
-    longitude: number;
-}
 
 const Map: React.FC = () => {
-    const [vessels, setVessels] = useState<Vessel[]>([
-        { vessel_id: "1", name: "Vessel Alpha", latitude: 15.0, longitude: 115.5 },
-        { vessel_id: "2", name: "Vessel Beta", latitude: 16.2, longitude: 114.8 },
-        { vessel_id: "3", name: "Vessel Gamma", latitude: 14.5, longitude: 112.6 },
-        { vessel_id: "4", name: "Vessel Delta", latitude: 13.8, longitude: 113.7 },
-        { vessel_id: "5", name: "Vessel Epsilon", latitude: 16.8, longitude: 117.3 },
-        { vessel_id: "6", name: "Vessel Zeta", latitude: 15.6, longitude: 116.2 },
-        { vessel_id: "7", name: "Vessel Eta", latitude: 14.9, longitude: 114.0 },
-        { vessel_id: "8", name: "Vessel Theta", latitude: 16.0, longitude: 113.5 },
-        { vessel_id: "9", name: "Vessel Iota", latitude: 13.5, longitude: 115.1 },
-        { vessel_id: "10", name: "Vessel Kappa", latitude: 14.6, longitude: 116.8 },
+    const [messages, setMessages] = useState<MessageResponse[]>([
+        {
+            registration_number: "NA001",
+            name: "Vessel Alpha",
+            latitude: 12.194934,
+            longitude: 109.225822,
+            status: "sunk",
+            captain_name: "Captain A",
+            captain_phone: "123456789",
+            created_at: "2023-01-01 12:00:00",
+        },
+        {
+            registration_number: "NA002",
+            name: "Vessel Beta",
+            latitude: 16.05,
+            longitude: 108.23,
+            status: "inactive",
+            captain_name: "Captain B",
+            captain_phone: "987654321",
+            created_at: "2023-02-01 14:30:00",
+        },
+        {
+            registration_number: "NA003",
+            name: "Vessel Gamma",
+            latitude: 14.5,
+            longitude: 119.2,
+            status: "warning",
+            captain_name: "Captain C",
+            captain_phone: "456789123",
+            created_at: "2023-03-01 10:15:00",
+        },
+        {
+            registration_number: "NA004",
+            name: "Vessel Delta",
+            latitude: 12.25,
+            longitude: 109.19,
+            status: "maintenance",
+            captain_name: "Captain D",
+            captain_phone: "654321987",
+            created_at: "2023-04-01 09:45:00",
+        },
+        {
+            registration_number: "NA005",
+            name: "Vessel Epsilon",
+            latitude: 15.8,
+            longitude: 119.0,
+            status: "active",
+            captain_name: "Captain E",
+            captain_phone: "789123456",
+            created_at: "2023-05-01 16:20:00",
+        },
+        {
+            registration_number: "NA006",
+            name: "Vessel Zeta",
+            latitude: 10.76,
+            longitude: 106.7,
+            status: "inactive",
+            captain_name: "Captain F",
+            captain_phone: "321789654",
+            created_at: "2023-06-01 11:00:00",
+        },
+        {
+            registration_number: "NA007",
+            name: "Vessel Eta",
+            latitude: 17.9,
+            longitude: 114.5,
+            status: "sunk",
+            captain_name: "Captain G",
+            captain_phone: "159753468",
+            created_at: "2023-07-01 15:10:00",
+        },
+        {
+            registration_number: "NA008",
+            name: "Vessel Theta",
+            latitude: 16.14,
+            longitude: 108.18,
+            status: "maintenance",
+            captain_name: "Captain H",
+            captain_phone: "258741369",
+            created_at: "2023-08-01 08:40:00",
+        },
+        {
+            registration_number: "NA009",
+            name: "Vessel Iota",
+            latitude: 19.5,
+            longitude: 117.1,
+            status: "active",
+            captain_name: "Captain I",
+            captain_phone: "147258369",
+            created_at: "2023-09-01 19:25:00",
+        },
+        {
+            registration_number: "NA010",
+            name: "Vessel Kappa",
+            latitude: 18.68,
+            longitude: 105.67,
+            status: "inactive",
+            captain_name: "Captain J",
+            captain_phone: "753159846",
+            created_at: "2023-10-01 21:30:00",
+        },
     ]);
 
-    const [mapCenter, setMapCenter] = useState<[number, number]>([15.0, 115.5]);
+    const statusMap: Record<string, {
+        text: string;
+        color: string;
+    }> = {
+        "active": { text: "Hoạt động", color: "bg-green-100 text-green-800" },
+        "inactive": { text: "Không hoạt động", color: "bg-red-100 text-red-800" },
+        "warning": { text: "Cảnh báo", color: "bg-yellow-100 text-yellow-800" },
+        "maintenance": { text: "Bảo trì", color: "bg-blue-100 text-blue-800" },
+        "sunk": { text: "Chìm", color: "bg-gray-100 text-gray-800" },
+    };
 
-    const DefaultIcon = L.icon({
-        iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-    });
-    L.Marker.prototype.options.icon = DefaultIcon;
+    const statusIcons: Record<string, L.Icon> = {
+        active: L.icon({
+            iconUrl: "/ship-active.png",
+            iconSize: [45, 45],
+            iconAnchor: [15, 45],
+            popupAnchor: [1, -34],
+        }),
+        inactive: L.icon({
+            iconUrl: "/ship-inactive.png",
+            iconSize: [45, 45],
+            iconAnchor: [15, 45],
+            popupAnchor: [1, -34],
+        }),
+        warning: L.icon({
+            iconUrl: "/ship-warning.png",
+            iconSize: [45, 45],
+            iconAnchor: [15, 45],
+            popupAnchor: [1, -34],
+        }),
+        maintenance: L.icon({
+            iconUrl: "/ship-maintenance.png",
+            iconSize: [45, 45],
+            iconAnchor: [15, 45],
+            popupAnchor: [1, -34],
+        }),
+        sunk: L.icon({
+            iconUrl: "/ship-sunk.png",
+            iconSize: [45, 45],
+            iconAnchor: [15, 45],
+            popupAnchor: [1, -34],
+        }),
+    };
 
     useEffect(() => {
-        const socket = io("ws://localhost:8000/ws/vessel-tracking/");
+        const socket = io("ws://localhost:8000/ws/vessel-tracking/", {
+            transports: ["websocket"],
+        });
 
         socket.on("message", (data: string) => {
-            const parsedData: Vessel = JSON.parse(data);
-            setVessels((prevVessels) => {
-                const updatedVessels = [...prevVessels];
-                const index = updatedVessels.findIndex(
-                    (v) => v.vessel_id === parsedData.vessel_id,
+            const parsedData: MessageResponse = JSON.parse(data);
+            setMessages((prevMessages) => {
+                const updatedMessages = [...prevMessages];
+                const index = updatedMessages.findIndex(
+                    (v) => v.registration_number === parsedData.registration_number,
                 );
 
                 if (index >= 0) {
-                    updatedVessels[index] = parsedData;
+                    updatedMessages[index] = parsedData;
                 } else {
-                    updatedVessels.push(parsedData);
+                    updatedMessages.push(parsedData);
                 }
 
-                // Update map center to the latest vessel's location
-                setMapCenter([parsedData.latitude, parsedData.longitude]);
-
-                return updatedVessels;
+                return updatedMessages;
             });
         });
 
@@ -64,23 +181,34 @@ const Map: React.FC = () => {
         };
     }, []);
 
+
     return (
-        <MapContainer center={mapCenter} zoom={5} style={{ height: "100vh", width: "100%" }}>
+        <MapContainer center={[15.0, 110.0]} zoom={6} style={{ height: "100vh", width: "100%" }}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            {vessels.map((vessel) => (
+            {messages.map((message) => (
                 <Marker
-                    key={vessel.vessel_id}
-                    position={[vessel.latitude, vessel.longitude]}
+                    key={message.registration_number}
+                    position={[message.latitude, message.longitude]}
+                    icon={statusIcons[message.status]}
                 >
                     <Tooltip direction="top" offset={[0, -25]} opacity={1} permanent={false}>
-                        <strong>Tàu:</strong> {vessel.name}
+                        <strong>Tàu:</strong> {message.name}
                         <br />
-                        <strong>ID:</strong> {vessel.vessel_id}
+                        <strong>Số đăng ký:</strong> {message.registration_number}
                         <br />
-                        <strong>Tọa độ:</strong> {vessel.latitude}, {vessel.longitude}
+                        <strong>Trạng thái:</strong> <span
+                        className={`p-1 ${statusMap[message.status].color}`}>{statusMap[message.status].text}</span>
+                        <br />
+                        <strong>Thuyền trưởng:</strong> {message.captain_name}
+                        <br />
+                        <strong>Điện thoại:</strong> {message.captain_phone}
+                        <br />
+                        <strong>Thời gian:</strong> {message.created_at}
+                        <br />
+                        <strong>Tọa độ:</strong> {message.latitude}, {message.longitude}
                     </Tooltip>
                 </Marker>
             ))}
