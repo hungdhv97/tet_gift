@@ -10,7 +10,7 @@ RUN npm install && npm cache clean --force
 COPY . .
 RUN npm run build
 
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 ARG NEXT_PUBLIC_API_URL
