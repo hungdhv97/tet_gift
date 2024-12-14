@@ -6,7 +6,7 @@ import { Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tool
 import { useFetchVessels } from "@/queries/vessel";
 import dynamic from "next/dynamic";
 
-const Map = dynamic(() => import("@/components/Map"), { ssr: false });
+const Map = dynamic(() => import("@/components/PathMap"), { ssr: false });
 
 const VesselManagementDashboard: React.FC = () => {
     const { data: vessels = [] } = useFetchVessels();

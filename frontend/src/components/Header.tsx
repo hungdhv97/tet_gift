@@ -28,7 +28,9 @@ export function Header() {
 
     const navLinks = [
         { href: "/introduction", text: "Giới thiệu" },
+        { href: "/news", text: "Tin tức - Sự kiện" },
         { href: "/vessels", text: "Danh sách tàu thuyền" },
+        { href: "/update_position", text: "Cập nhật tọa độ" },
     ];
 
     return (
@@ -71,7 +73,7 @@ export function Header() {
                                 className="text-white md:hidden"
                                 onClick={toggleMobileMenu}
                             >
-                                <HiMenu className="text-3xl" /> {/* Replaced menu icon */}
+                                <HiMenu className="text-3xl" />
                             </button>
                             {isMobileMenuOpen && (
                                 <div className="absolute top-full -left-4 w-full bg-blue-700 text-white z-20">
