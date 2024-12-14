@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { FaAnchor, FaExclamationTriangle, FaShip, FaTools, FaWater } from "react-icons/fa";
+import { FaAnchor, FaBolt, FaCompass, FaShip, FaSnowflake, FaWrench } from "react-icons/fa";
 import { Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useFetchVessels } from "@/queries/vessel";
 import dynamic from "next/dynamic";
@@ -12,10 +12,10 @@ const VesselManagementDashboard: React.FC = () => {
     const { data: vessels = [] } = useFetchVessels();
 
     const statusMapping = useMemo(() => ({
-        active: { label: "Hoạt động", color: "#3B82F6" },
-        inactive: { label: "Không hoạt động", color: "#10B981" },
-        maintenance: { label: "Bảo trì", color: "#F59E0B" },
-        warning: { label: "Cảnh Báo", color: "#F87171" },
+        active: { label: "Hoạt động", color: "#10B981" },
+        inactive: { label: "Không hoạt động", color: "#F87171" },
+        maintenance: { label: "Bảo trì", color: "#3B82F6" },
+        warning: { label: "Cảnh Báo", color: "#F59E0B" },
         sunk: { label: "Đã Chìm", color: "#6B7280" },
     }), []);
 
@@ -41,30 +41,30 @@ const VesselManagementDashboard: React.FC = () => {
         { icon: FaShip, color: "text-blue-500", label: "Tổng Số Tàu", value: vessels.length },
         {
             icon: FaAnchor,
-            color: "text-green-500",
+            color: "text-red-500",
             label: "Tàu Không Hoạt Động",
             value: vessels.filter(v => v.status === "inactive").length,
         },
         {
-            icon: FaShip,
-            color: "text-blue-500",
+            icon: FaCompass,
+            color: "text-green-500",
             label: "Tàu Đang Hoạt Động",
             value: vessels.filter(v => v.status === "active").length,
         },
         {
-            icon: FaTools,
-            color: "text-yellow-500",
+            icon: FaWrench,
+            color: "text-blue-500",
             label: "Tàu Đang Bảo Trì",
             value: vessels.filter(v => v.status === "maintenance").length,
         },
         {
-            icon: FaExclamationTriangle,
-            color: "text-red-500",
+            icon: FaBolt,
+            color: "text-yellow-500",
             label: "Tàu Cảnh Báo",
             value: vessels.filter(v => v.status === "warning").length,
         },
         {
-            icon: FaWater,
+            icon: FaSnowflake,
             color: "text-gray-500",
             label: "Tàu Đã Chìm",
             value: vessels.filter(v => v.status === "sunk").length,
@@ -76,10 +76,12 @@ const VesselManagementDashboard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
                 {statusCards.map(({ icon: Icon, color, label, value }, index) => (
                     <div className="bg-white p-6 rounded-lg shadow" key={index}>
-                        <div className="flex items-center">
-                            <Icon className={`${color} text-3xl mr-4`} />
-                            <div>
-                                <p className="text-gray-500">{label}</p>
+                        <div className="flex items-center h-full">
+                            <div className={`${color} text-3xl mr-4 flex items-center justify-center`}>
+                                <Icon size={48} />
+                            </div>
+                            <div className="text-center">
+                                <p className="text-gray-500 mb-2">{label}</p>
                                 <p className="text-2xl font-bold">{value}</p>
                             </div>
                         </div>
