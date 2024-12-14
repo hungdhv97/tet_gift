@@ -15,7 +15,7 @@ services:
       sh -c "
       python manage.py migrate &&
       python create_samples/main.py &&
-      gunicorn backend.wsgi --bind 0.0.0.0:8000 --workers 4 --access-logfile - --error-logfile -
+      uvicorn backend.asgi:application --host 0.0.0.0 --port 8000 --workers 4 --log-level info
       "
     volumes:
       - backend_static:/app/static
