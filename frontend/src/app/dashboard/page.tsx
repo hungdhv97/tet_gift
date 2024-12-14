@@ -2,29 +2,9 @@
 
 import React, { useState } from "react";
 import { FaAnchor, FaEdit, FaSearch, FaShip, FaTrash } from "react-icons/fa";
-import {
-    ArcElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Legend,
-    LinearScale,
-    LineElement,
-    PointElement,
-    Tooltip,
-} from "chart.js";
-import { Line, Pie } from "react-chartjs-2";
+import { Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useDeleteVessel, useFetchVessels } from "@/queries/vessel";
 import { useRouter } from "next/navigation";
-
-ChartJS.register(
-    ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-);
 
 const VesselManagementDashboard: React.FC = () => {
     const { data: vessels } = useFetchVessels();
@@ -34,43 +14,28 @@ const VesselManagementDashboard: React.FC = () => {
 
     if (!vessels) return null;
 
-    const pieChartData = {
-        labels: ["Hoạt động", "Không hoạt động", "Đang Bảo Dưỡng"],
-        datasets: [
-            {
-                data: [
-                    vessels.filter(vessel => vessel.status === "Hoạt động")
-                        .length,
-                    vessels.filter(
-                        vessel => vessel.status === "Không hoạt động",
-                    ).length,
-                    vessels.filter(vessel => vessel.status === "Đang bảo dưỡng")
-                        .length,
-                ],
-                backgroundColor: ["#3B82F6", "#10B981", "#F59E0B"],
-                borderColor: ["#2563EB", "#059669", "#D97706"],
-            },
-        ],
-    };
+    const pieChartData = [
+        { name: "Hoạt động", value: vessels.filter(vessel => vessel.status === "Hoạt động").length, color: "#3B82F6" },
+        {
+            name: "Không hoạt động",
+            value: vessels.filter(vessel => vessel.status === "Không hoạt động").length,
+            color: "#10B981",
+        },
+        {
+            name: "Đang Bảo Dưỡng",
+            value: vessels.filter(vessel => vessel.status === "Đang bảo dưỡng").length,
+            color: "#F59E0B",
+        },
+    ];
 
-    const lineChartData = {
-        labels: [
-            "Tháng 1",
-            "Tháng 2",
-            "Tháng 3",
-            "Tháng 4",
-            "Tháng 5",
-            "Tháng 6",
-        ],
-        datasets: [
-            {
-                label: "Tàu Đang Vận Chuyển",
-                data: [4, 3, 5, 4, 6, 5],
-                borderColor: "#3B82F6",
-                tension: 0.1,
-            },
-        ],
-    };
+    const lineChartData = [
+        { month: "Tháng 1", value: 4 },
+        { month: "Tháng 2", value: 3 },
+        { month: "Tháng 3", value: 5 },
+        { month: "Tháng 4", value: 4 },
+        { month: "Tháng 5", value: 6 },
+        { month: "Tháng 6", value: 5 },
+    ];
 
     const handleEdit = (vesselId: number) => {
         router.push(`/vessels/${vesselId}`);
@@ -148,7 +113,24 @@ const VesselManagementDashboard: React.FC = () => {
                             Phân Phối Trạng Thái Tàu
                         </h2>
                         <div className="h-64">
-                            <Pie data={pieChartData} />
+                            <ResponsiveContainer>
+                                <PieChart>
+                                    <Pie
+                                        data={pieChartData}
+                                        dataKey="value"
+                                        nameKey="name"
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius={80}
+                                    >
+                                        {pieChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                    <Legend />
+                                </PieChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow">
@@ -156,7 +138,19 @@ const VesselManagementDashboard: React.FC = () => {
                             Xu Hướng Vận Chuyển Hàng Tháng
                         </h2>
                         <div className="h-64">
-                            <Line data={lineChartData} />
+                            <ResponsiveContainer>
+                                <LineChart data={lineChartData}>
+                                    <XAxis dataKey="month" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="value"
+                                        stroke="#3B82F6"
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
                 </div>
@@ -188,69 +182,69 @@ const VesselManagementDashboard: React.FC = () => {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="bg-gray-50">
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Tàu
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Trạng Thái
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Vị Trí
-                                    </th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Hành Động
-                                    </th>
-                                </tr>
+                            <tr className="bg-gray-50">
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Tàu
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Trạng Thái
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Vị Trí
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Hành Động
+                                </th>
+                            </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {filteredVessels.map(vessel => (
-                                    <tr key={vessel.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <div className="text-sm font-medium text-gray-900">
-                                                    {vessel.name}
-                                                </div>
+                            {filteredVessels.map(vessel => (
+                                <tr key={vessel.id}>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center">
+                                            <div className="text-sm font-medium text-gray-900">
+                                                {vessel.name}
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                                                     vessel.status ===
                                                     "Hoạt động"
                                                         ? "bg-blue-100 text-blue-800"
                                                         : vessel.status ===
-                                                            "Không hoạt động"
-                                                          ? "bg-red-100 text-red-800"
-                                                          : "bg-green-100 text-green-800"
+                                                        "Không hoạt động"
+                                                            ? "bg-red-100 text-red-800"
+                                                            : "bg-green-100 text-green-800"
                                                 }`}
                                             >
                                                 {vessel.status}
                                             </span>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                            {vessel.address}
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button
-                                                onClick={() =>
-                                                    handleEdit(vessel.id)
-                                                }
-                                                className="text-blue-600 hover:text-blue-900 mr-4"
-                                            >
-                                                <FaEdit className="text-xl" />
-                                            </button>
-                                            <button
-                                                onClick={() =>
-                                                    handleDelete(vessel.id)
-                                                }
-                                                className="text-red-600 hover:text-red-900"
-                                            >
-                                                <FaTrash className="text-xl" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {vessel.address}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button
+                                            onClick={() =>
+                                                handleEdit(vessel.id)
+                                            }
+                                            className="text-blue-600 hover:text-blue-900 mr-4"
+                                        >
+                                            <FaEdit className="text-xl" />
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                handleDelete(vessel.id)
+                                            }
+                                            className="text-red-600 hover:text-red-900"
+                                        >
+                                            <FaTrash className="text-xl" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
