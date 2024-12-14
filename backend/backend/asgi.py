@@ -18,7 +18,7 @@ from django.core.asgi import get_asgi_application
 
 from cms.tracking.routing import websocket_urlpatterns
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cms.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 
 application = ProtocolTypeRouter(
     {

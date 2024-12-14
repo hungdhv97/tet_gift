@@ -13,3 +13,4 @@ redis[hiredis]
 attrs
 black
 channels
+uvicorn[standard]

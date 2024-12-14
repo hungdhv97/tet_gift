@@ -5,7 +5,7 @@ class Vessel(models.Model):
     STATUS_CHOICES = [
         ("active", "Hoạt động"),
         ("inactive", "Không hoạt động"),
-        ("maintenance", "Maintenance"),
+        ("maintenance", "Bảo trì"),
     ]
 
     name = models.CharField(max_length=100)

@@ -4,6 +4,9 @@ import React from "react";
 import { FaAnchor, FaShip, FaTools } from "react-icons/fa";
 import { Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useFetchVessels } from "@/queries/vessel";
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
 const VesselManagementDashboard: React.FC = () => {
     const { data: vessels } = useFetchVessels();
@@ -158,12 +161,9 @@ const VesselManagementDashboard: React.FC = () => {
                 <h2 className="text-xl font-bold mb-4">
                     Theo Dõi Thời Gian Thực
                 </h2>
-                <div className="h-96 bg-gray-100 flex items-center justify-center">
-                    <p className="text-gray-500">
-                        Đang Xây Dựng Thành Phần Bản Đồ
-                    </p>
-                </div>
+                <Map />
             </div>
+
         </div>
     );
 };
