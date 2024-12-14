@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FaAnchor, FaShip } from "react-icons/fa";
+import { FaAnchor, FaShip, FaTools } from "react-icons/fa";
 import { Cell, Legend, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useFetchVessels } from "@/queries/vessel";
 
@@ -10,16 +10,26 @@ const VesselManagementDashboard: React.FC = () => {
 
     if (!vessels) return null;
 
+    const statusMapping = {
+        active: "Hoạt động",
+        inactive: "Không hoạt động",
+        maintenance: "Bảo trì",
+    };
+
     const pieChartData = [
-        { name: "Hoạt động", value: vessels.filter(vessel => vessel.status === "Hoạt động").length, color: "#3B82F6" },
         {
-            name: "Không hoạt động",
-            value: vessels.filter(vessel => vessel.status === "Không hoạt động").length,
+            name: statusMapping.active,
+            value: vessels.filter(vessel => vessel.status === "active").length,
+            color: "#3B82F6",
+        },
+        {
+            name: statusMapping.inactive,
+            value: vessels.filter(vessel => vessel.status === "inactive").length,
             color: "#10B981",
         },
         {
-            name: "Đang Bảo Dưỡng",
-            value: vessels.filter(vessel => vessel.status === "Đang bảo dưỡng").length,
+            name: statusMapping.maintenance,
+            value: vessels.filter(vessel => vessel.status === "maintenance").length,
             color: "#F59E0B",
         },
     ];
@@ -35,7 +45,7 @@ const VesselManagementDashboard: React.FC = () => {
 
     return (
         <div className="container">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                 <div className="bg-white p-6 rounded-lg shadow">
                     <div className="flex items-center">
                         <FaShip className="text-blue-500 text-3xl mr-4" />
@@ -51,13 +61,11 @@ const VesselManagementDashboard: React.FC = () => {
                     <div className="flex items-center">
                         <FaAnchor className="text-green-500 text-3xl mr-4" />
                         <div>
-                            <p className="text-gray-500">Tàu Đã Cập Bến</p>
+                            <p className="text-gray-500">Tàu Không Hoạt Động</p>
                             <p className="text-2xl font-bold">
                                 {
                                     vessels.filter(
-                                        vessel =>
-                                            vessel.status ===
-                                            "Không hoạt động",
+                                        vessel => vessel.status === "inactive",
                                     ).length
                                 }
                             </p>
@@ -69,13 +77,27 @@ const VesselManagementDashboard: React.FC = () => {
                         <FaShip className="text-blue-500 text-3xl mr-4" />
                         <div>
                             <p className="text-gray-500">
-                                Tàu Đang Vận Chuyển
+                                Tàu Đang Hoạt Động
                             </p>
                             <p className="text-2xl font-bold">
                                 {
                                     vessels.filter(
-                                        vessel =>
-                                            vessel.status === "Hoạt động",
+                                        vessel => vessel.status === "active",
+                                    ).length
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div className="bg-white p-6 rounded-lg shadow">
+                    <div className="flex items-center">
+                        <FaTools className="text-yellow-500 text-3xl mr-4" />
+                        <div>
+                            <p className="text-gray-500">Tàu Đang Bảo Trì</p>
+                            <p className="text-2xl font-bold">
+                                {
+                                    vessels.filter(
+                                        vessel => vessel.status === "maintenance",
                                     ).length
                                 }
                             </p>

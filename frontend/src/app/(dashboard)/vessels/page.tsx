@@ -80,15 +80,18 @@ const VesselList: React.FC = () => {
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span
                                         className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                                            vessel.status === "Hoạt động"
+                                            vessel.status === "active"
                                                 ? "bg-blue-100 text-blue-800"
-                                                : vessel.status ===
-                                                "Không hoạt động"
+                                                : vessel.status === "inactive"
                                                     ? "bg-red-100 text-red-800"
                                                     : "bg-green-100 text-green-800"
                                         }`}
                                     >
-                                        {vessel.status}
+                                        {vessel.status === "active"
+                                            ? "Hoạt động"
+                                            : vessel.status === "inactive"
+                                                ? "Không hoạt động"
+                                                : "Bảo trì"}
                                     </span>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

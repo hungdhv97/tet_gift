@@ -1,8 +1,10 @@
 "use client";
 
 import React, { ChangeEvent, FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { FaShip } from "react-icons/fa";
 import { AiOutlineWarning } from "react-icons/ai";
+import { useAddVessel } from "@/queries/vessel";
 
 interface FormData {
     name: string;
@@ -16,6 +18,7 @@ interface FormData {
 }
 
 const AddVessel: React.FC = () => {
+    const router = useRouter();
     const [formData, setFormData] = useState<FormData>({
         name: "",
         imoNumber: "",
@@ -28,7 +31,7 @@ const AddVessel: React.FC = () => {
     });
 
     const [errors, setErrors] = useState<Partial<FormData>>({});
-    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+    const addVesselMutation = useAddVessel();
 
     const validateForm = (): boolean => {
         let tempErrors: Partial<FormData> = {};
@@ -88,18 +91,21 @@ const AddVessel: React.FC = () => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log("Biểu mẫu đã gửi:", formData);
-            setShowSuccess(true);
-            setTimeout(() => setShowSuccess(false), 3000);
-            setFormData({
-                name: "",
-                imoNumber: "",
-                latitude: "",
-                longitude: "",
-                address: "",
-                status: "",
-                description: "",
-                speed: "",
+            const payload = {
+                name: formData.name,
+                imo_number: formData.imoNumber,
+                latitude: parseFloat(formData.latitude),
+                longitude: parseFloat(formData.longitude),
+                address: formData.address,
+                status: formData.status,
+                description: formData.description || null,
+                speed: parseFloat(formData.speed),
+            };
+
+            addVesselMutation.mutate(payload, {
+                onSuccess: () => {
+                    router.push("/vessels");
+                },
             });
         }
     };
@@ -128,12 +134,6 @@ const AddVessel: React.FC = () => {
                             Thêm Tàu Mới
                         </h1>
                     </div>
-
-                    {showSuccess && (
-                        <div className="mb-4 p-4 bg-green-100 text-green-700 rounded-md">
-                            Tàu đã được thêm thành công!
-                        </div>
-                    )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
