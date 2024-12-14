@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-const API_USER_ME = `${process.env.NEXT_PUBLIC_API_URL}/api/users/me`;
+const API_USER_ME = `${process.env.NEXT_PUBLIC_API_URL}/api/users/me/`;
 
 export async function middleware(req: NextRequest) {
     const accessToken = req.cookies.get("access_token");

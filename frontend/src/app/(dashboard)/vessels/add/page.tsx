@@ -10,8 +10,6 @@ import { toast } from "react-toastify";
 interface FormData {
     name: string;
     registrationNumber: string;
-    latitude: string;
-    longitude: string;
     address: string;
     status: string;
     description: string;
@@ -25,8 +23,6 @@ const AddVessel: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         name: "",
         registrationNumber: "",
-        latitude: "",
-        longitude: "",
         address: "",
         status: "",
         description: "",
@@ -41,27 +37,6 @@ const AddVessel: React.FC = () => {
     const validateForm = (): boolean => {
         let tempErrors: Partial<FormData> = {};
         if (!formData.name) tempErrors.name = "Tên là bắt buộc";
-        if (!formData.registrationNumber || !/^IMO\d{7}$/.test(formData.registrationNumber)) {
-            tempErrors.registrationNumber =
-                "Định dạng số đăng ký không hợp lệ (ví dụ: IMO1234567)";
-        }
-        if (
-            !formData.latitude ||
-            isNaN(Number(formData.latitude)) ||
-            Number(formData.latitude) < -90 ||
-            Number(formData.latitude) > 90
-        ) {
-            tempErrors.latitude = "Vĩ độ phải nằm trong khoảng (-90 đến 90)";
-        }
-        if (
-            !formData.longitude ||
-            isNaN(Number(formData.longitude)) ||
-            Number(formData.longitude) < -180 ||
-            Number(formData.longitude) > 180
-        ) {
-            tempErrors.longitude =
-                "Kinh độ phải nằm trong khoảng (-180 đến 180)";
-        }
         if (!formData.address) tempErrors.address = "Địa chỉ là bắt buộc";
         if (!formData.status) tempErrors.status = "Trạng thái là bắt buộc";
         if (
@@ -104,8 +79,6 @@ const AddVessel: React.FC = () => {
             const payload = {
                 name: formData.name,
                 registration_number: formData.registrationNumber,
-                latitude: formData.latitude,
-                longitude: formData.longitude,
                 address: formData.address,
                 status: formData.status,
                 description: formData.description || null,
@@ -170,53 +143,13 @@ const AddVessel: React.FC = () => {
                                     name="registrationNumber"
                                     value={formData.registrationNumber}
                                     onChange={handleChange}
-                                    placeholder="IMO1234567"
+                                    placeholder="NA1234567"
                                     className={`mt-1 block w-full rounded-md shadow-sm py-2 px-3 border ${errors.registrationNumber ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-blue-500`}
                                 />
                                 {errors.registrationNumber && (
                                     <p className="mt-1 text-sm text-red-600 flex items-center">
                                         <AiOutlineWarning className="mr-1" />{" "}
                                         {errors.registrationNumber}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Vĩ Độ
-                                </label>
-                                <input
-                                    type="number"
-                                    name="latitude"
-                                    value={formData.latitude}
-                                    onChange={handleChange}
-                                    step="any"
-                                    className={`mt-1 block w-full rounded-md shadow-sm py-2 px-3 border ${errors.latitude ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                                />
-                                {errors.latitude && (
-                                    <p className="mt-1 text-sm text-red-600 flex items-center">
-                                        <AiOutlineWarning className="mr-1" />{" "}
-                                        {errors.latitude}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">
-                                    Kinh Độ
-                                </label>
-                                <input
-                                    type="number"
-                                    name="longitude"
-                                    value={formData.longitude}
-                                    onChange={handleChange}
-                                    step="any"
-                                    className={`mt-1 block w-full rounded-md shadow-sm py-2 px-3 border ${errors.longitude ? "border-red-500" : "border-gray-300"} focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                                />
-                                {errors.longitude && (
-                                    <p className="mt-1 text-sm text-red-600 flex items-center">
-                                        <AiOutlineWarning className="mr-1" />{" "}
-                                        {errors.longitude}
                                     </p>
                                 )}
                             </div>
