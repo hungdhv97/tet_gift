@@ -81,6 +81,7 @@ const VesselMarker = React.memo(({ latestPosition }: { latestPosition: MessageRe
         </Tooltip>
     </Marker>
 ));
+VesselMarker.displayName = "VesselMarker";
 
 const VesselPath = React.memo(
     ({ vesselPath, pathColor }: { vesselPath: MessageResponse[]; pathColor: string }) => {
@@ -88,6 +89,7 @@ const VesselPath = React.memo(
         return <Polyline positions={positions} color={pathColor} />;
     },
 );
+VesselPath.displayName = "VesselPath";
 
 const generateColorFromId = (id: string): string => {
     let hash = 0;
