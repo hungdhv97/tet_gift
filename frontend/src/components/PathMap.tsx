@@ -65,7 +65,8 @@ const Map: React.FC = () => {
     }, [positionHistory]);
 
     useEffect(() => {
-        const socket = new WebSocket(`ws://${process.env.NEXT_PUBLIC_HOST}:8000/ws/vessel-tracking/`);
+        const protocol = process.env.NEXT_PUBLIC_HOST === "localhost" ? "ws" : "wss";
+        const socket = new WebSocket(`${protocol}://${process.env.NEXT_PUBLIC_HOST}:8000/ws/vessel-tracking/`);
 
         socket.onmessage = (event) => {
             const parsedData: { message: MessageResponse } = JSON.parse(event.data);

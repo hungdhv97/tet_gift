@@ -31,6 +31,7 @@ services:
       context: ./frontend
       args:
         NEXT_PUBLIC_API_URL: "https://backend.quanlytauca.site"
+        NEXT_PUBLIC_HOST: "backend.quanlytauca.site"
     image: vessel_tracking_frontend
     container_name: vessel_tracking_frontend
     networks:
