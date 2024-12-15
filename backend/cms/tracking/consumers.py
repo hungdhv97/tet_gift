@@ -1,6 +1,10 @@
 import json
+import logging
+import time
 
 from channels.generic.websocket import AsyncWebsocketConsumer
+
+logger = logging.getLogger("django")
 
 
 class VesselTrackingConsumer(AsyncWebsocketConsumer):
@@ -23,4 +27,7 @@ class VesselTrackingConsumer(AsyncWebsocketConsumer):
 
     async def send_update(self, event):
         message = event["message"]
+        start_time = time.time()
         await self.send(text_data=json.dumps({"message": message}))
+        end_time = time.time()
+        print(f"Time taken to send message: {end_time - start_time:.6f} seconds")
