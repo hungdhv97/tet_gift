@@ -9,6 +9,7 @@ const VesselList: React.FC = () => {
     const { data: vessels } = useFetchVessels();
     const { mutate: deleteVessel } = useDeleteVessel();
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [filterStatus, setFilterStatus] = useState<string>("all");
     const router = useRouter();
 
     if (!vessels) return null;
@@ -21,9 +22,14 @@ const VesselList: React.FC = () => {
         deleteVessel({ vesselId: id });
     };
 
-    const filteredVessels = vessels.filter(vessel =>
-        vessel.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
+    const filteredVessels = vessels.filter(vessel => {
+        const searchLower = searchTerm.toLowerCase();
+        const matchesSearch =
+            vessel.name.toLowerCase().includes(searchLower) ||
+            vessel.registration_number.toLowerCase().includes(searchLower);
+        const matchesStatus = filterStatus === "all" || vessel.status === filterStatus;
+        return matchesSearch && matchesStatus;
+    });
 
     const statusMapping: Record<string, {
         text: string;
@@ -52,13 +58,25 @@ const VesselList: React.FC = () => {
                         <div className="relative w-full sm:w-auto">
                             <input
                                 type="text"
-                                placeholder="Tìm kiếm tàu..."
-                                className="pl-10 pr-4 py-2 border rounded-lg w-full sm:w-auto"
+                                placeholder="Tìm kiếm tàu hoặc số đăng ký..."
+                                className="pl-10 pr-4 py-2 border rounded-lg w-full sm:w-80"
                                 value={searchTerm}
                                 onChange={e => setSearchTerm(e.target.value)}
                             />
                             <FaSearch className="absolute left-3 top-3 text-gray-400" />
                         </div>
+                        <select
+                            className="pl-3 pr-4 py-2 border rounded-lg w-full sm:w-auto"
+                            value={filterStatus}
+                            onChange={e => setFilterStatus(e.target.value)}
+                        >
+                            <option value="all">Tất cả trạng thái</option>
+                            <option value="active">Hoạt động</option>
+                            <option value="inactive">Không hoạt động</option>
+                            <option value="warning">Cảnh báo</option>
+                            <option value="maintenance">Bảo trì</option>
+                            <option value="sunk">Chìm</option>
+                        </select>
                     </div>
                 </div>
                 <div className="overflow-x-auto">
@@ -67,6 +85,9 @@ const VesselList: React.FC = () => {
                         <tr className="bg-gray-50">
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Tàu
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Số Đăng Ký
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Trạng Thái
@@ -88,6 +109,9 @@ const VesselList: React.FC = () => {
                                             {vessel.name}
                                         </div>
                                     </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {vessel.registration_number}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                     <span
