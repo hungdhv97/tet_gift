@@ -13,6 +13,6 @@ redis[hiredis]
 attrs
 black
 channels
-uvicorn[standard]
+daphne
 schedule
 requests
