@@ -9,14 +9,12 @@ import { useLogin } from "@/queries/user";
 interface FormData {
     username: string;
     password: string;
-    rememberMe: boolean;
 }
 
 const LoginPage: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
         username: "",
         password: "",
-        rememberMe: false,
     });
     const [error, setError] = useState<string>("");
     const [success, setSuccess] = useState<string>("");
@@ -24,10 +22,10 @@ const LoginPage: React.FC = () => {
     const login = useLogin();
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target;
+        const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
-            [name]: type === "checkbox" ? checked : value,
+            [name]: value,
         }));
     };
 
@@ -92,17 +90,6 @@ const LoginPage: React.FC = () => {
                                             onChange={handleInputChange}
                                             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                         />
-                                    </div>
-
-                                    <div className="flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            name="rememberMe"
-                                            checked={formData.rememberMe}
-                                            onChange={handleInputChange}
-                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                        />
-                                        <label className="ml-2 block text-sm text-gray-700">Ghi nhớ</label>
                                     </div>
 
                                     <button
