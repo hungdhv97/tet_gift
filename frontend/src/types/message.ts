@@ -1,4 +1,5 @@
 type MessageResponse = {
+    id: number;
     name: string;
     status: string;
     registration_number: string;

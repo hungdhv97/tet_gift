@@ -14,3 +14,5 @@ attrs
 black
 channels
 uvicorn[standard]
+schedule
+requests

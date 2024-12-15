@@ -2,7 +2,6 @@ import { MapContainer, Marker, Polyline, TileLayer, Tooltip } from "react-leafle
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState } from "react";
 import L from "leaflet";
-import io from "socket.io-client";
 
 const Map: React.FC = () => {
     const [vesselTracking, setVesselTracking] = useState<MessageResponse[]>([
@@ -150,17 +149,19 @@ const Map: React.FC = () => {
     };
 
     useEffect(() => {
-        const socket = io("ws://localhost:8000/ws/vessel-tracking/", {
-            transports: ["websocket"],
-        });
+        const socket = new WebSocket("ws://localhost:8000/ws/vessel-tracking/");
 
-        socket.on("message", (data: string) => {
-            const parsedData: MessageResponse = JSON.parse(data);
+        socket.onmessage = (event) => {
+            const parsedData: MessageResponse = JSON.parse(event.data);
             setVesselTracking((prevData) => [...prevData, parsedData]);
-        });
+        };
+
+        socket.onerror = (error) => {
+            console.error("WebSocket error:", error);
+        };
 
         return () => {
-            socket.disconnect();
+            socket.close();
         };
     }, []);
 

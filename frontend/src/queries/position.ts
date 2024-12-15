@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ENDPOINTS } from "@/utils/endpoints";
 import { axiosInstanceWithToken } from "@/utils/axiosConfig";
 
@@ -16,6 +16,19 @@ export const useUpdateVesselPosition = () => {
             const { data } = await axiosInstanceWithToken.post(
                 ENDPOINTS.POST.UPDATE_POSITION,
                 payload,
+            );
+            return data;
+        },
+    });
+};
+
+
+export const useFetchPositionHistory = () => {
+    return useQuery<MessageResponse[], Error>({
+        queryKey: ["position-history"],
+        queryFn: async () => {
+            const { data } = await axiosInstanceWithToken.get<MessageResponse[]>(
+                ENDPOINTS.GET.POSITION_HISTORY,
             );
             return data;
         },

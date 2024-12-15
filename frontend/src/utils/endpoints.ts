@@ -2,7 +2,7 @@ export const ENDPOINTS = {
     GET: {
         VESSEL: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
         VESSELS: `api/vessels/vessels/`,
-        PRODUCTS: `api/products/products/`,
+        POSITION_HISTORY: `api/tracking/position-history/`,
         RELATED_PRODUCT: (productId: number) =>
             `api/products/products/related/${productId}/products/`,
         PRODUCT_SIZES: `api/products/sizes/`,

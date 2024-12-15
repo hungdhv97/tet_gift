@@ -1,13 +1,23 @@
 import random
 
-positions_data = [
-    {
-        "vessel_name": f"Tàu {chr(65 + random.randint(0, 4))}",
-        "latitude": round(random.uniform(12.0, 20.0), 6),
-        "longitude": round(random.uniform(110.0, 120.0), 6),
-    }
-    for i in range(100)
-]
+positions_data = []
+
+for vessel_index in range(5):
+    vessel_name = f"Tàu {chr(65 + vessel_index)}"
+    latitude = random.uniform(12.0, 20.0)
+    longitude = random.uniform(110.0, 120.0)
+
+    for position_index in range(20):
+        positions_data.append(
+            {
+                "vessel_name": vessel_name,
+                "latitude": round(latitude, 6),
+                "longitude": round(longitude, 6),
+            }
+        )
+
+        latitude += random.uniform(-0.2, 0.2)
+        longitude += random.uniform(-0.2, 0.2)
 
 crew_data = [
     {
