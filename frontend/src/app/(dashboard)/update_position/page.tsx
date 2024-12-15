@@ -87,7 +87,9 @@ const UpdateVesselPosition: React.FC = () => {
                 },
                 {
                     onSuccess: () => {
-                        router.push("/vessels");
+                        setPositionData(
+                            { latitude: "", longitude: "" },
+                        );
                     },
                 },
             );
@@ -189,7 +191,7 @@ const UpdateVesselPosition: React.FC = () => {
                     </form>
                 </div>
             </div>
-            <Map />
+            <Map vesselId={parseInt(selectedVesselId)} />
         </div>
     );
 };

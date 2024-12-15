@@ -1,118 +1,21 @@
 import { MapContainer, Marker, Polyline, TileLayer, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
-import L from "leaflet";
+import React, { useEffect, useState } from "react";
+import L, { LatLngTuple } from "leaflet"; // Import LatLngTuple
+import { useFetchPositionHistory } from "@/queries/position";
 
-const Map: React.FC = () => {
-    const [vesselTracking, setVesselTracking] = useState<MessageResponse[]>([
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T10:00:00Z",
-            latitude: 14.1,
-            longitude: 110.1,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T10:20:00Z",
-            latitude: 15.5,
-            longitude: 110.5,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T10:40:00Z",
-            latitude: 15.8,
-            longitude: 111.0,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T11:00:00Z",
-            latitude: 16.7,
-            longitude: 111.7,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T11:20:00Z",
-            latitude: 17.5,
-            longitude: 112.5,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T11:40:00Z",
-            latitude: 18.0,
-            longitude: 114.0,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T12:00:00Z",
-            latitude: 19.0,
-            longitude: 114.0,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T12:20:00Z",
-            latitude: 19.5,
-            longitude: 115.0,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T12:40:00Z",
-            latitude: 21.0,
-            longitude: 116.0,
-        },
-        {
-            registration_number: "VN001",
-            name: "Tàu Alpha",
-            status: "active",
-            captain_name: "Nguyễn Văn A",
-            captain_phone: "0123456789",
-            created_at: "2023-10-01T13:00:00Z",
-            latitude: 22.0,
-            longitude: 117.0,
-        },
-    ]);
-
-    const statusMap: Record<string, { text: string; color: string }> = {
-        active: { text: "Hoạt động", color: "bg-green-100 text-green-800" },
-        inactive: { text: "Không hoạt động", color: "bg-red-100 text-red-800" },
-        warning: { text: "Cảnh báo", color: "bg-yellow-100 text-yellow-800" },
-        maintenance: { text: "Bảo trì", color: "bg-blue-100 text-blue-800" },
-        sunk: { text: "Chìm", color: "bg-gray-100 text-gray-800" },
+const Map: React.FC<{ vesselId: number }> = ({ vesselId }) => {
+    const [messages, setMessages] = useState<MessageResponse[]>([]);
+    const { data: positionHistory } = useFetchPositionHistory();
+    const statusMap: Record<string, {
+        text: string;
+        color: string;
+    }> = {
+        "active": { text: "Hoạt động", color: "bg-green-100 text-green-800" },
+        "inactive": { text: "Không hoạt động", color: "bg-red-100 text-red-800" },
+        "warning": { text: "Cảnh báo", color: "bg-yellow-100 text-yellow-800" },
+        "maintenance": { text: "Bảo trì", color: "bg-blue-100 text-blue-800" },
+        "sunk": { text: "Chìm", color: "bg-gray-100 text-gray-800" },
     };
 
     const statusIcons: Record<string, L.Icon> = {
@@ -149,15 +52,17 @@ const Map: React.FC = () => {
     };
 
     useEffect(() => {
-        const socket = new WebSocket("ws://localhost:8000/ws/vessel-tracking/");
+        if (positionHistory) {
+            setMessages(positionHistory.filter((position) => position.id === vesselId));
+        }
+    }, [positionHistory, vesselId]);
+
+    useEffect(() => {
+        const socket = new WebSocket(`ws://${process.env.NEXT_PUBLIC_HOST}:8000/ws/vessel-tracking/`);
 
         socket.onmessage = (event) => {
-            const parsedData: MessageResponse = JSON.parse(event.data);
-            setVesselTracking((prevData) => [...prevData, parsedData]);
-        };
-
-        socket.onerror = (error) => {
-            console.error("WebSocket error:", error);
+            const parsedData: { message: MessageResponse } = JSON.parse(event.data);
+            setMessages((prevMessages) => [...prevMessages, parsedData.message]);
         };
 
         return () => {
@@ -165,48 +70,63 @@ const Map: React.FC = () => {
         };
     }, []);
 
+    const generateColorFromId = (id: string): string => {
+        let hash = 0;
+        for (let i = 0; i < id.length; i++) {
+            hash = id.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        let color = "#";
+        for (let i = 0; i < 3; i++) {
+            const value = (hash >> (i * 8)) & 0xff;
+            color += ("00" + value.toString(16)).substr(-2);
+        }
+        return color;
+    };
+
     return (
         <MapContainer center={[15.0, 110.0]} zoom={6} style={{ height: "100vh", width: "100%" }}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             />
-            {vesselTracking.length > 0 && (
-                <>
-                    <Marker
-                        key={vesselTracking[vesselTracking.length - 1].registration_number}
-                        position={[
-                            vesselTracking[vesselTracking.length - 1].latitude,
-                            vesselTracking[vesselTracking.length - 1].longitude,
-                        ]}
-                        icon={statusIcons[vesselTracking[vesselTracking.length - 1].status]}
-                    >
-                        <Tooltip direction="top" offset={[0, -25]} opacity={1} permanent={false}>
-                            <strong>Tàu:</strong> {vesselTracking[vesselTracking.length - 1].name}
-                            <br />
-                            <strong>Số đăng ký:</strong> {vesselTracking[vesselTracking.length - 1].registration_number}
-                            <br />
-                            <strong>Trạng thái:</strong>{" "}
-                            <span
-                                className={`p-1 ${statusMap[vesselTracking[vesselTracking.length - 1].status].color}`}>
-                                {statusMap[vesselTracking[vesselTracking.length - 1].status].text}
-                            </span>
-                            <br />
-                            <strong>Thuyền trưởng:</strong> {vesselTracking[vesselTracking.length - 1].captain_name}
-                            <br />
-                            <strong>Điện thoại:</strong> {vesselTracking[vesselTracking.length - 1].captain_phone}
-                            <br />
-                            <strong>Thời gian:</strong> {vesselTracking[vesselTracking.length - 1].created_at}
-                            <br />
-                            <strong>Tọa độ:</strong> {vesselTracking[vesselTracking.length - 1].latitude},{" "}
-                            {vesselTracking[vesselTracking.length - 1].longitude}
-                        </Tooltip>
-                    </Marker>
-                    <Polyline
-                        positions={vesselTracking.map((message) => [message.latitude, message.longitude])}
-                        color="blue"
-                    />
-                </>
+            {messages.filter((message) => message.id === vesselId).length > 0 && (
+                <React.Fragment>
+                    {(() => {
+                        const vesselPath = messages.filter((message) => message.id === vesselId);
+                        const [latestPosition] = vesselPath.slice(-1);
+                        const positions: LatLngTuple[] = vesselPath.map((message) => [message.latitude, message.longitude] as LatLngTuple);
+
+                        const pathColor = generateColorFromId(latestPosition.registration_number);
+
+                        return (
+                            <React.Fragment>
+                                <Polyline positions={positions} color={pathColor} />
+                                <Marker
+                                    position={[latestPosition.latitude, latestPosition.longitude] as LatLngTuple}
+                                    icon={statusIcons[latestPosition.status]}
+                                >
+                                    <Tooltip direction="top" offset={[0, -25]} opacity={1} permanent={false}>
+                                        <strong>Id:</strong> {latestPosition.id}
+                                        <br /><strong>Tàu:</strong> {latestPosition.name}
+                                        <br />
+                                        <strong>Số đăng ký:</strong> {latestPosition.registration_number}
+                                        <br />
+                                        <strong>Trạng thái:</strong> <span
+                                        className={`p-1 ${statusMap[latestPosition.status].color}`}>{statusMap[latestPosition.status].text}</span>
+                                        <br />
+                                        <strong>Thuyền trưởng:</strong> {latestPosition.captain_name}
+                                        <br />
+                                        <strong>Điện thoại:</strong> {latestPosition.captain_phone}
+                                        <br />
+                                        <strong>Thời gian:</strong> {latestPosition.created_at}
+                                        <br />
+                                        <strong>Tọa độ:</strong> {latestPosition.latitude}, {latestPosition.longitude}
+                                    </Tooltip>
+                                </Marker>
+                            </React.Fragment>
+                        );
+                    })()}
+                </React.Fragment>
             )}
         </MapContainer>
     );
