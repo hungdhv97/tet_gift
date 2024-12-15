@@ -127,6 +127,7 @@ const Map: React.FC = () => {
 
         socket.onmessage = (event) => {
             const parsedData = JSON.parse(event.data);
+            console.log(parsedData);
             setMessages((prevMessages) => {
                 const updatedMessages = { ...prevMessages };
                 if (!updatedMessages[parsedData.message.id]) {

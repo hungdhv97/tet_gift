@@ -128,6 +128,15 @@ const VesselManagementDashboard: React.FC = () => {
                 </div>
             </div>
 
+            <div className="bg-white p-6 rounded-lg shadow mb-8">
+                <h2 className="text-xl font-bold mb-4">Dự Báo Windy</h2>
+                <iframe
+                    className="w-full h-screen"
+                    src="https://embed.windy.com/embed2.html?lat=14.0583&lon=108.2772&zoom=5"
+                    style={{ border: "none" }}
+                ></iframe>
+            </div>
+
             <div className="bg-white p-6 rounded-lg shadow">
                 <h2 className="text-xl font-bold mb-4">Theo Dõi Thời Gian Thực</h2>
                 <Map />
