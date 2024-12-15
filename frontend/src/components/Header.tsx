@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { HiLogout, HiMenu } from "react-icons/hi";
 import { useFetchUser } from "@/queries/user";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { removeAccessToken } from "@/helpers/auth";
 
 export function Header() {
@@ -12,6 +12,8 @@ export function Header() {
     const pathname = usePathname();
     const router = useRouter();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+    const profileMenuRef = useRef<HTMLDivElement>(null);
 
     const handleLogout = () => {
         removeAccessToken();
@@ -25,6 +27,29 @@ export function Header() {
     const closeMobileMenu = () => {
         setIsMobileMenuOpen(false);
     };
+
+    const toggleProfileMenu = () => {
+        setIsProfileMenuOpen(!isProfileMenuOpen);
+    };
+
+    const closeProfileMenu = () => {
+        setIsProfileMenuOpen(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                profileMenuRef.current &&
+                !profileMenuRef.current.contains(event.target as Node)
+            ) {
+                setIsProfileMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const navLinks = [
         { href: "/introduction", text: "Giới thiệu" },
@@ -98,27 +123,35 @@ export function Header() {
                     )}
                     {user && (
                         <div className="flex items-center">
-                            <div className="relative group">
+                            <div className="relative" ref={profileMenuRef}>
                                 <img
                                     src="/images/logopn.png"
                                     alt="User settings"
                                     className="rounded-full w-10 h-10 cursor-pointer"
+                                    onClick={toggleProfileMenu}
                                 />
-                                <div
-                                    className="hidden group-hover:block absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-30">
-                                    <div className="p-4">
-                                        <span className="block text-lg">{user.username}</span>
-                                        <span className="block truncate text-lg font-bold">{user.role}</span>
-                                    </div>
-                                    <hr className="my-1" />
-                                    <button
-                                        className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                                        onClick={handleLogout}
+                                {isProfileMenuOpen && (
+                                    <div
+                                        className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-30"
                                     >
-                                        <HiLogout className="mr-2" />
-                                        Đăng xuất
-                                    </button>
-                                </div>
+                                        <div className="p-4">
+                                            <span className="block text-lg">
+                                                {user.username}
+                                            </span>
+                                            <span className="block truncate text-lg font-bold">
+                                                {user.role}
+                                            </span>
+                                        </div>
+                                        <hr className="my-1" />
+                                        <button
+                                            className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                                            onClick={handleLogout}
+                                        >
+                                            <HiLogout className="mr-2" />
+                                            Đăng xuất
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
