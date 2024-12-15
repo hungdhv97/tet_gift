@@ -78,7 +78,7 @@ vessels_data = [
         "status": "active",
         "description": "Mô tả A",
         "speed": 20.5,
-        "captain_name": "John Doe",
+        "captain_name": "Nguyễn Văn A",
         "captain_phone": "1234567890",
     },
     {
@@ -88,7 +88,7 @@ vessels_data = [
         "status": "inactive",
         "description": "Mô tả B",
         "speed": 30.0,
-        "captain_name": "Jane Smith",
+        "captain_name": "Trần Thị B",
         "captain_phone": "9876543210",
     },
     {
@@ -98,7 +98,7 @@ vessels_data = [
         "status": "sunk",
         "description": "Mô tả C",
         "speed": 15.0,
-        "captain_name": "Sam Wilson",
+        "captain_name": "Lê Văn C",
         "captain_phone": "5647382910",
     },
     {
@@ -108,7 +108,7 @@ vessels_data = [
         "status": "maintenance",
         "description": "Mô tả D",
         "speed": 25.0,
-        "captain_name": "Lucas Brown",
+        "captain_name": "Phạm Quốc D",
         "captain_phone": "2938475610",
     },
     {
@@ -118,7 +118,7 @@ vessels_data = [
         "status": "warning",
         "description": "Mô tả E",
         "speed": 40.0,
-        "captain_name": "Anna Johnson",
+        "captain_name": "Vũ Thị E",
         "captain_phone": "1928374650",
     },
 ]
