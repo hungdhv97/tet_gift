@@ -15,7 +15,7 @@ const IntroductionPage: React.FC = () => {
                 <Carousel autoPlay infiniteLoop showThumbs={false} showArrows={true}>
                     {aboutPage.carousel_images.map((image) => (
                         <div key={image.id}>
-                            <img src={image.image} alt={image.title} />
+                            <img className="h-[40vh] md:h-[80vh] object-cover" src={image.image} alt={image.title} />
                             <p className="legend">{image.title}</p>
                         </div>
                     ))}
