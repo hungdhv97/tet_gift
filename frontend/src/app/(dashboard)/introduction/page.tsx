@@ -28,12 +28,20 @@ const IntroductionPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {aboutPage.videos.map((video) => (
                         <div className="aspect-w-16 aspect-h-9" key={video.id}>
-                            <video controls className="w-full h-full object-cover">
-                                <source
-                                    src={video.video_url || video.video_file || ""}
-                                    type="video/mp4"
+                            {video.video_url ? (
+                                <iframe
+                                    src={video.video_url}
+                                    className="w-full h-full object-cover"
+                                    allowFullScreen
                                 />
-                            </video>
+                            ) : (
+                                <video controls className="w-full h-full object-cover">
+                                    <source
+                                        src={video.video_file || ""}
+                                        type="video/mp4"
+                                    />
+                                </video>
+                            )}
                             <p className="text-center mt-2">{video.title}</p>
                         </div>
                     ))}
