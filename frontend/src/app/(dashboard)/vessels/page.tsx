@@ -102,9 +102,6 @@ const VesselList: React.FC = () => {
                                 Trạng Thái
                             </th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Vị Trí
-                            </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Hành Động
                             </th>
                         </tr>
@@ -139,9 +136,6 @@ const VesselList: React.FC = () => {
                                     >
                                         {statusMapping[vessel.status].text}
                                     </span>
-                                </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {vessel.address}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                     <button

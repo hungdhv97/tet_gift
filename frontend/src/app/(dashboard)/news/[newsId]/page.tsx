@@ -10,7 +10,6 @@ import { useFetchNewsPost } from "@/queries/news";
 const NewsArticle: React.FC = () => {
     const params = useParams<{ newsId: string }>();
     const newsId = parseInt(params.newsId);
-    console.log(newsId);
     const { data: newsPost } = useFetchNewsPost(newsId);
     if (!newsPost) return null;
 
