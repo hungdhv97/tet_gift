@@ -3,10 +3,10 @@ export const ENDPOINTS = {
         VESSEL: (vesselId: number) => `api/vessels/vessels/${vesselId}/`,
         VESSELS: `api/vessels/vessels/`,
         POSITION_HISTORY: `api/tracking/position-history/`,
-        RELATED_PRODUCT: (productId: number) =>
-            `api/products/products/related/${productId}/products/`,
-        PRODUCT_SIZES: `api/products/sizes/`,
-        PRODUCT_COLORS: `api/products/colors/`,
+        NEWS:
+            `api/news/news-posts/`,
+        NEWS_POST: (newsId: number) => `api/news/news-posts/${newsId}/`,
+        ABOUT_PAGE: `api/introduction/about-data/`,
         PRODUCT_STYLES: `api/products/styles/`,
         PAGED_PRODUCT: (params: string) =>
             `api/products/products/filter/products/?${params}`,

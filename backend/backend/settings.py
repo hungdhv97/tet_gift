@@ -50,6 +50,8 @@ INSTALLED_APPS = [
     "cms.tracking",
     "cms.users",
     "cms.vessels",
+    "cms.introduction",
+    "cms.news",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
