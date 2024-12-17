@@ -8,11 +8,36 @@ export async function middleware(req: NextRequest) {
     const urlPath = req.nextUrl.pathname;
 
     if (urlPath === "/") {
-        return redirectTo("/dashboard", req);
+        return redirectTo("/login", req);
+    }
+
+    if (urlPath === "/login") {
+        if (!accessToken) {
+            return NextResponse.next();
+        }
+
+        try {
+            const response = await fetch(API_USER_ME, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${accessToken.value}`,
+                },
+            });
+
+            if (response.ok) {
+                return redirectTo("/dashboard", req);
+            } else {
+                console.error("Authentication failed:", response.statusText);
+                return deleteTokenAndRedirect(req);
+            }
+        } catch (error) {
+            console.error("Error during authentication:", error);
+            return deleteTokenAndRedirect(req);
+        }
     }
 
     if (!accessToken) {
-        return redirectTo(urlPath === "/dashboard" ? "/login" : "/dashboard", req);
+        return redirectTo("/login", req);
     }
 
     try {
@@ -27,11 +52,11 @@ export async function middleware(req: NextRequest) {
             return NextResponse.next();
         } else {
             console.error("Authentication failed:", response.statusText);
-            return redirectTo(urlPath === "/dashboard" ? "/login" : "/dashboard", req);
+            return deleteTokenAndRedirect(req);
         }
     } catch (error) {
         console.error("Error during authentication:", error);
-        return redirectTo(urlPath === "/dashboard" ? "/login" : "/dashboard", req);
+        return deleteTokenAndRedirect(req);
     }
 }
 
@@ -40,6 +65,12 @@ function redirectTo(target: string, req: NextRequest) {
     return NextResponse.redirect(redirectUrl);
 }
 
+function deleteTokenAndRedirect(req: NextRequest) {
+    const response = NextResponse.redirect(new URL("/login", req.url));
+    response.cookies.delete("access_token");
+    return response;
+}
+
 export const config = {
-    matcher: ["/dashboard/:path*", "/vessels/:path*", "/"],
+    matcher: ["/dashboard", "/introduction", "/news/:path*", "/update_position", "/vessels/:path*", "/", "/login"],
 };
