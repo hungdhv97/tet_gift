@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { useFetchLinks, useFetchNews } from "@/queries/news";
 
 const NewsComponent: React.FC = () => {
@@ -37,12 +38,12 @@ const NewsComponent: React.FC = () => {
                                     )}
                                     <div className="p-4">
                                         <h3 className="text-xl font-semibold mb-2">{news.title}</h3>
-                                        <a
+                                        <Link
                                             href={`/news/${news.id}`}
                                             className="text-blue-500 hover:underline"
                                         >
                                             Đọc thêm
-                                        </a>
+                                        </Link>
                                     </div>
                                 </div>
                             );
@@ -52,16 +53,16 @@ const NewsComponent: React.FC = () => {
                         <h3 className="text-xl font-semibold mb-4">VĂN BẢN BAN HÀNH</h3>
                         <ul className="space-y-2">
                             {links.map((link) => (
-                                <li key={link.id}>
-                                    <a
-                                        href={link.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="text-blue-500 hover:underline"
-                                    >
+                                <Link
+                                    key={link.id}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <li className="text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg p-2">
                                         {link.title}
-                                    </a>
-                                </li>
+                                    </li>
+                                </Link>
                             ))}
                         </ul>
                     </div>
