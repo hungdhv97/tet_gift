@@ -59,7 +59,7 @@ const NewsComponent: React.FC = () => {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <li className="mt-2 text-blue-700 hover:bg-blue-700 hover:text-white rounded-lg p-2">
+                                    <li className="mt-2 text-justify text-blue-700 hover:bg-blue-700 hover:text-white rounded-lg p-2">
                                         {link.title}
                                     </li>
                                 </Link>
