@@ -7,7 +7,7 @@ export const ENDPOINTS = {
             `api/news/news-posts/`,
         NEWS_POST: (newsId: number) => `api/news/news-posts/${newsId}/`,
         ABOUT_PAGE: `api/introduction/about-data/`,
-        PRODUCT_STYLES: `api/products/styles/`,
+        LINKS: `api/news/links/`,
         PAGED_PRODUCT: (params: string) =>
             `api/products/products/filter/products/?${params}`,
         PAGED_ORDER: (params: string) => `api/orders/orders/filter/?${params}`,

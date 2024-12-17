@@ -59,11 +59,14 @@ export function Header() {
     ];
 
     return (
-        <header className="bg-blue-800">
+        <header
+            className="bg-cover bg-center"
+            style={{ backgroundImage: "url('/sea.jpg')" }}
+        >
             <div className="container sm:px-3 relative flex items-center justify-between">
                 <div className="flex items-center">
                     <Link href="/dashboard" className="flex items-center shrink">
-                        <button className="bg-blue-800 p-2 flex flex-col items-center">
+                        <button className="bg-transparent p-2 flex flex-col items-center">
                             <img
                                 src="/images/logo.png"
                                 className="h-12 sm:h-16"
@@ -135,12 +138,12 @@ export function Header() {
                                         className="absolute right-0 mt-2 w-48 bg-white rounded shadow-lg z-30"
                                     >
                                         <div className="p-4">
-                                            <span className="block text-lg">
-                                                {user.username}
-                                            </span>
+                                    <span className="block text-lg">
+                                        {user.username}
+                                    </span>
                                             <span className="block truncate text-lg font-bold">
-                                                {user.role}
-                                            </span>
+                                        {user.role}
+                                    </span>
                                         </div>
                                         <hr className="my-1" />
                                         <button

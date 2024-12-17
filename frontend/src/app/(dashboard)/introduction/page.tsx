@@ -50,9 +50,11 @@ const IntroductionPage: React.FC = () => {
 
             <section>
                 <h2 className="text-2xl font-bold text-center text-red-800 mb-4">{aboutPage.introduction.title}</h2>
-                <p className="indent-8 text-lg leading-relaxed text-justify">
-                    {aboutPage.introduction.content}
-                </p>
+                <div className="indent-8 text-lg leading-relaxed text-justify space-y-4">
+                    {aboutPage.introduction.content.split(/[\r\n\t]+/).map((paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                    ))}
+                </div>
             </section>
         </div>
     );

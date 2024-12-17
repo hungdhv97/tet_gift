@@ -15,3 +15,9 @@ type NewsPostResponse = {
     updated_at: string;
     contents: NewsContentResponse[];
 };
+
+type LinkResponse = {
+    id: number;
+    title: string;
+    url: string;
+};

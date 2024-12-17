@@ -14,6 +14,18 @@ export const useFetchNews = () => {
     });
 };
 
+export const useFetchLinks = () => {
+    return useQuery<LinkResponse[], Error>({
+        queryKey: ["links"],
+        queryFn: async () => {
+            const { data } = await axiosInstanceWithToken.get<LinkResponse[]>(
+                ENDPOINTS.GET.LINKS,
+            );
+            return data;
+        },
+    });
+};
+
 export const useFetchNewsPost = (newsId: number) => {
     return useQuery<NewsPostResponse, Error>({
         queryKey: ["news", newsId],

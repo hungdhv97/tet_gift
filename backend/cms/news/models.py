@@ -45,3 +45,12 @@ class NewsContent(models.Model):
 
     def __str__(self):
         return f"{self.post.title} - {self.get_content_type_display()}"
+
+
+class Link(models.Model):
+    title = models.CharField(max_length=200, verbose_name="Title")
+    url = models.URLField(verbose_name="URL")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Created At")
+
+    def __str__(self):
+        return self.title

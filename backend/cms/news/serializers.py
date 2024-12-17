@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from .models import Link
 from .models import (
     NewsContent,
     NewsPost,
@@ -26,3 +27,9 @@ class NewsPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewsPost
         fields = ["id", "title", "created_at", "updated_at", "contents"]
+
+
+class LinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Link
+        fields = ['id', 'title', 'url', 'created_at']

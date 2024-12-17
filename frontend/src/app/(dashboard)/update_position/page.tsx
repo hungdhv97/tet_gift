@@ -102,7 +102,6 @@ const UpdateVesselPosition: React.FC = () => {
 
     return (
         <div className="min-h-screen container">
-            <Map vesselId={parseInt(selectedVesselId)} />
             <div className="max-w-3xl mx-auto mt-6">
                 <div className="bg-white shadow-xl rounded-lg p-6 sm:p-8">
                     <div className="flex items-center mb-6">
@@ -192,6 +191,7 @@ const UpdateVesselPosition: React.FC = () => {
                     </form>
                 </div>
             </div>
+            <Map vesselId={parseInt(selectedVesselId)} />
         </div>
     );
 };
