@@ -9,7 +9,7 @@ const IntroductionPage: React.FC = () => {
     if (!aboutPage) return null;
 
     return (
-        <div className="introduction-page max-w-7xl mx-auto p-4 space-y-8">
+        <div className="introduction-page max-w-7xl mx-auto p-4 space-y-4">
             <Carousel autoPlay infiniteLoop showThumbs={false} showArrows={true}>
                 {aboutPage.carousel_images.map((image) => (
                     <div key={image.id}>
@@ -24,15 +24,15 @@ const IntroductionPage: React.FC = () => {
                     phòng</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {aboutPage.videos.map((video) => (
-                        <div className="aspect-w-16 aspect-h-9" key={video.id}>
+                        <div key={video.id}>
                             {video.video_url ? (
                                 <iframe
                                     src={video.video_url}
-                                    className="w-full h-full object-cover"
+                                    className="aspect-video"
                                     allowFullScreen
                                 />
                             ) : (
-                                <video controls className="w-full h-full object-cover">
+                                <video controls className="aspect-video">
                                     <source
                                         src={video.video_file || ""}
                                         type="video/mp4"
