@@ -10,17 +10,14 @@ const IntroductionPage: React.FC = () => {
 
     return (
         <div className="introduction-page max-w-7xl mx-auto p-4 space-y-8">
-            <section>
-                <h2 className="text-2xl font-bold text-center text-green-800 mb-4">Hình ảnh về bộ đội biên phòng</h2>
-                <Carousel autoPlay infiniteLoop showThumbs={false} showArrows={true}>
-                    {aboutPage.carousel_images.map((image) => (
-                        <div key={image.id}>
-                            <img className="h-[40vh] md:h-[80vh] object-cover" src={image.image} alt={image.title} />
-                            <p className="legend">{image.title}</p>
-                        </div>
-                    ))}
-                </Carousel>
-            </section>
+            <Carousel autoPlay infiniteLoop showThumbs={false} showArrows={true}>
+                {aboutPage.carousel_images.map((image) => (
+                    <div key={image.id}>
+                        <img className="h-[40vh] md:h-[80vh] object-cover" src={image.image} alt={image.title} />
+                        <p className="legend">{image.title}</p>
+                    </div>
+                ))}
+            </Carousel>
 
             <section>
                 <h2 className="text-2xl font-bold text-center text-blue-800 mb-4">Video về hoạt động của bộ đội biên

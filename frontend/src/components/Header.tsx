@@ -85,16 +85,15 @@ export function Header() {
                         <>
                             <ul className="hidden md:flex space-x-4">
                                 {navLinks.map((link, index) => (
-                                    <li key={index}>
-                                        <Link
-                                            href={link.href}
-                                            className={`text-white md:text-xl ${
-                                                pathname === link.href ? "font-bold" : ""
-                                            }`}
-                                        >
-                                            {link.text}
-                                        </Link>
-                                    </li>
+                                    <Link
+                                        key={index}
+                                        href={link.href}
+                                        className={`block text-white md:text-xl px-4 py-2 rounded-lg hover:bg-blue-500 ${
+                                            pathname === link.href ? "bg-blue-700" : ""
+                                        }`}
+                                    >
+                                        <li>{link.text}</li>
+                                    </Link>
                                 ))}
                             </ul>
                             <button
@@ -128,9 +127,9 @@ export function Header() {
                         <div className="flex items-center">
                             <div className="relative" ref={profileMenuRef}>
                                 <img
-                                    src="/images/logopn.png"
+                                    src="/avatar.png"
                                     alt="User settings"
-                                    className="rounded-full w-10 h-10 cursor-pointer"
+                                    className="rounded-full size-12 bg-white cursor-pointer"
                                     onClick={toggleProfileMenu}
                                 />
                                 {isProfileMenuOpen && (

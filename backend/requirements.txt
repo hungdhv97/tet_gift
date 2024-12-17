@@ -16,3 +16,4 @@ channels
 daphne
 schedule
 requests
+uvicorn[standard]
