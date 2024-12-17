@@ -4,7 +4,9 @@ from rest_framework import (
 )
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import (
+    RefreshToken,
+)
 
 from cms.users.serializers import (
     LoginSerializer,
@@ -53,3 +55,10 @@ class MeView(views.APIView):
     def get(self, request):
         user = request.user
         return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+
+
+class VerifyTokenView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "Token is valid"}, status=status.HTTP_200_OK)

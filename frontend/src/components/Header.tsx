@@ -58,6 +58,12 @@ export function Header() {
         { href: "/update_position", text: "Cập nhật tọa độ" },
     ];
 
+    const roleTranslations: { [key: string]: string } = {
+        admin: "Quản trị viên",
+        moderator: "Người kiểm duyệt",
+        user: "Người dùng",
+    };
+
     return (
         <header
             className="bg-cover bg-center"
@@ -141,7 +147,7 @@ export function Header() {
                                         {user.username}
                                     </span>
                                             <span className="block truncate text-lg font-bold">
-                                        {user.role}
+                                        {roleTranslations[user.role] || user.role}
                                     </span>
                                         </div>
                                         <hr className="my-1" />

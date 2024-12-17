@@ -135,8 +135,8 @@ users_data = [
         "address": "123 Admin Street",
     },
     {
-        "username": "moderator1",
-        "password": "password456",
+        "username": "thuyenvien1",
+        "password": "1234",
         "role": "moderator",
         "is_active": True,
         "email": "moderator1@example.com",

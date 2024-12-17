@@ -4,15 +4,18 @@ import React, { useState } from "react";
 import { FaEdit, FaSearch, FaTrash } from "react-icons/fa";
 import { useDeleteVessel, useFetchVessels } from "@/queries/vessel";
 import { useRouter } from "next/navigation";
+import { useFetchUser } from "@/queries/user";
 
 const VesselList: React.FC = () => {
     const { data: vessels } = useFetchVessels();
+    const { data: user } = useFetchUser();
     const { mutate: deleteVessel } = useDeleteVessel();
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [filterStatus, setFilterStatus] = useState<string>("all");
     const router = useRouter();
 
     if (!vessels) return null;
+    if (!user) return null;
 
     const handleEdit = (vesselId: number) => {
         router.push(`/vessels/${vesselId}/edit`);
@@ -48,13 +51,17 @@ const VesselList: React.FC = () => {
                 <div
                     className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 space-y-4 sm:space-y-0">
                     <h2 className="text-xl font-bold">Danh Sách Tàu</h2>
+                    {user.role === "admin" && (
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
+                            <button
+                                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full sm:w-auto"
+                                onClick={() => router.push("/vessels/add")}
+                            >
+                                Thêm tàu
+                            </button>
+                        </div>
+                    )}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 space-y-4 sm:space-y-0">
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 w-full sm:w-auto"
-                            onClick={() => router.push("/vessels/add")}
-                        >
-                            Thêm tàu
-                        </button>
                         <div className="relative w-full sm:w-auto">
                             <input
                                 type="text"
@@ -101,9 +108,11 @@ const VesselList: React.FC = () => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Trạng Thái
                             </th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Hành Động
-                            </th>
+                            {user.role === "admin" && (
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Hành Động
+                                </th>
+                            )}
                         </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
@@ -137,20 +146,22 @@ const VesselList: React.FC = () => {
                                         {statusMapping[vessel.status].text}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <button
-                                        onClick={() => handleEdit(vessel.id)}
-                                        className="text-blue-600 hover:text-blue-900 mr-4"
-                                    >
-                                        <FaEdit className="text-xl" />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(vessel.id)}
-                                        className="text-red-600 hover:text-red-900"
-                                    >
-                                        <FaTrash className="text-xl" />
-                                    </button>
-                                </td>
+                                {user.role === "admin" && (
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <button
+                                            onClick={() => handleEdit(vessel.id)}
+                                            className="text-blue-600 hover:text-blue-900 mr-4"
+                                        >
+                                            <FaEdit className="text-xl" />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(vessel.id)}
+                                            className="text-red-600 hover:text-red-900"
+                                        >
+                                            <FaTrash className="text-xl" />
+                                        </button>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                         </tbody>
