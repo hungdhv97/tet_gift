@@ -28,11 +28,11 @@ const IntroductionPage: React.FC = () => {
                             {video.video_url ? (
                                 <iframe
                                     src={video.video_url}
-                                    className="aspect-video"
+                                    className="aspect-video w-full"
                                     allowFullScreen
                                 />
                             ) : (
-                                <video controls className="aspect-video">
+                                <video controls className="aspect-video w-full">
                                     <source
                                         src={video.video_file || ""}
                                         type="video/mp4"
