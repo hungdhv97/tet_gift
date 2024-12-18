@@ -1,12 +1,13 @@
-from cms.users.models import CustomUser
+from django.contrib.auth.models import User
+
 from create_samples.create_scripts.consts import users_data
 
 
 def create_users():
-    CustomUser.objects.all().delete()
+    User.objects.all().delete()
     for user_data in users_data:
         try:
-            user = CustomUser(**user_data)
+            user = User(**user_data)
             user.set_password(user_data["password"])
             user.save()
         except Exception as e:

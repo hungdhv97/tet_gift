@@ -3,8 +3,7 @@ WORKDIR /app
 
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-ARG NEXT_PUBLIC_HOST
-ENV NEXT_PUBLIC_HOST=${NEXT_PUBLIC_HOST}
+
 
 COPY package.json package-lock.json ./
 RUN npm install && npm cache clean --force
@@ -17,8 +16,6 @@ WORKDIR /app
 
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
-ARG NEXT_PUBLIC_HOST
-ENV NEXT_PUBLIC_HOST=${NEXT_PUBLIC_HOST}
 ENV NEXT_SHARP_PATH=/app/node_modules/sharp
 
 COPY --from=builder /app/package.json ./
