@@ -23,6 +23,7 @@ services:
     networks:
       - nginx_network
       - global_default
+      - nginx_proxy_manager_default
 
 
   tet_gift_frontend:
@@ -34,6 +35,7 @@ services:
     container_name: tet_gift_frontend
     networks:
       - nginx_network
+      - nginx_proxy_manager_default
 
 networks:
   nginx_network:
