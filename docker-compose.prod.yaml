@@ -15,7 +15,7 @@ services:
       sh -c "
       python manage.py migrate &&
       python create_samples/main.py &&
-      gunicorn backend.asgi:application -w 4 -k uvicorn.workers.UvicornWorker
+      python manage.py runserver
       "
     volumes:
       - backend_static:/app/static
