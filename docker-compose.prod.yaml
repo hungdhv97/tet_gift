@@ -15,7 +15,7 @@ services:
       sh -c "
       python manage.py migrate &&
       python create_samples/main.py &&
-      python manage.py runserver
+      gunicorn backend.asgi:application -w 4 -k uvicorn.workers.UvicornWorker
       "
     volumes:
       - backend_static:/app/static
@@ -23,7 +23,6 @@ services:
     networks:
       - nginx_network
       - global_default
-      - nginx_proxy_manager_default
 
 
   tet_gift_frontend:
@@ -35,14 +34,11 @@ services:
     container_name: tet_gift_frontend
     networks:
       - nginx_network
-      - nginx_proxy_manager_default
 
 networks:
   nginx_network:
     driver: bridge
   global_default:
-    external: true
-  nginx_proxy_manager_default:
     external: true
 
 volumes:
