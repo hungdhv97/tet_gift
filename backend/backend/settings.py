@@ -35,23 +35,18 @@ ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "http://194.233.84.195:8000",
-    "http://quanlytauca.site",
-    "http://www.quanlytauca.site",
-    "http://backend.quanlytauca.site",
-    "https://quanlytauca.site",
-    "https://www.quanlytauca.site",
-    "https://backend.quanlytauca.site",
+    "http://thuhanggift.store",
+    "http://www.thuhanggift.store",
+    "http://backend.thuhanggift.store",
+    "https://thuhanggift.store",
+    "https://www.thuhanggift.store",
+    "https://backend.thuhanggift.store",
 ]
 
 # Application definition
 
 INSTALLED_APPS = [
-    "cms.crew",
-    "cms.tracking",
-    "cms.users",
-    "cms.vessels",
-    "cms.introduction",
-    "cms.news",
+    "cms.gifts",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -167,16 +162,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 TIME_ZONE = "Asia/Ho_Chi_Minh"
-
-AUTH_USER_MODEL = "users.CustomUser"
-
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=3),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-}

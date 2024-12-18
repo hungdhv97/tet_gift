@@ -1,24 +1,21 @@
 services:
-  vessel_tracking_backend:
+  tet_gift_backend:
     build:
       context: ./backend
-    container_name: vessel_tracking_backend
-    image: vessel_tracking_backend
+    container_name: tet_gift_backend
+    image: tet_gift_backend
     environment:
-      POSTGRES_DB: vessel_tracking
+      POSTGRES_DB: tet_gift
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 1234
       POSTGRES_HOST: postgresql
       POSTGRES_PORT: 5432
-      FRONTEND_URL: https://www.quanlytauca.site
+      FRONTEND_URL: https://www.thuhanggift.store
     command: >
       sh -c "
       python manage.py migrate &&
       python create_samples/main.py &&
-      apt update &&
-      apt install -y curl &&
-      nohup python create_samples/job.py > /dev/null 2>&1 &
-      daphne -b 0.0.0.0 -p 8000 backend.asgi:application
+      gunicorn backend.asgi:application -w 4 -k uvicorn.workers.UvicornWorker
       "
     volumes:
       - backend_static:/app/static
@@ -28,14 +25,13 @@ services:
       - global_default
 
 
-  vessel_tracking_frontend:
+  tet_gift_frontend:
     build:
       context: ./frontend
       args:
-        NEXT_PUBLIC_API_URL: "https://backend.quanlytauca.site"
-        NEXT_PUBLIC_HOST: "backend.quanlytauca.site"
-    image: vessel_tracking_frontend
-    container_name: vessel_tracking_frontend
+        NEXT_PUBLIC_API_URL: "https://backend.thuhanggift.store"
+    image: tet_gift_frontend
+    container_name: tet_gift_frontend
     networks:
       - nginx_network
 

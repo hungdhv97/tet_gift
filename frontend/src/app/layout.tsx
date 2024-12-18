@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Providers from "@/components/providers/Providers";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -16,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Tuyến Biển Nghệ An",
-    description: "Mai Phương - BĐPB Tỉnh Nghệ An",
+    title: "Quà tết Thu Hằng",
+    description: "Quà tặng gia đình người thân doanh nghiệp",
 };
 
 export default function RootLayout({
@@ -30,15 +27,7 @@ export default function RootLayout({
         <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-        <Providers>
-            {children}
-        </Providers>
-        <ToastContainer
-            limit={2}
-            autoClose={2000}
-            position="top-center"
-            theme="colored"
-        />
+        {children}
         </body>
         </html>
     );

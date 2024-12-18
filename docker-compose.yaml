@@ -3,7 +3,7 @@ services:
     image: postgres
     container_name: postgresql
     environment:
-      POSTGRES_DB: vessel_tracking
+      POSTGRES_DB: tet_gift
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: 1234
       POSTGRESQL_LOG_MIN_MESSAGES: FATAL

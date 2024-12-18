@@ -25,12 +25,7 @@ from django.urls import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/users/", include("cms.users.urls")),
-    path("api/vessels/", include("cms.vessels.urls")),
-    path("api/crew/", include("cms.crew.urls")),
-    path("api/tracking/", include("cms.tracking.urls")),
-    path("api/introduction/", include("cms.introduction.urls")),
-    path("api/news/", include("cms.news.urls")),
+    path("api/gifts/", include("cms.gifts.urls")),
 ]
 
 if settings.DEBUG:
