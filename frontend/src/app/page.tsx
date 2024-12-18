@@ -10,18 +10,17 @@ const LandingPage: React.FC = () => {
     const [selectedGift, setSelectedGift] = useState<GiftResponse | null>(null);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
 
-    const bannerImages = gifts ? gifts.flatMap((gift) => gift.images.map((image) => image.image)) : [];
-
+    const bannerImages = [
+        "banner.png",
+        "banner1.png",
+        "banner2.png",
+    ];
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
     };
 
-    const prevSlide = () => {
-        setCurrentSlide((prev) => (prev === 0 ? bannerImages.length - 1 : prev - 1));
-    };
-
     useEffect(() => {
-        const timer = setInterval(nextSlide, 5000);
+        const timer = setInterval(nextSlide, 3000);
         return () => clearInterval(timer);
     }, [bannerImages]);
 
@@ -29,7 +28,7 @@ const LandingPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <header className="bg-red-600 text-white py-2">
+            <header className="bg-red-600 text-white py-2 fixed top-0 left-0 w-full z-50">
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div className="flex items-center space-x-4">
                         <a href="tel:+1234567890" className="flex items-center space-x-2 hover:text-red-200">
@@ -48,33 +47,19 @@ const LandingPage: React.FC = () => {
                 </div>
             </header>
 
-            <div className="container mx-auto px-4 py-8 relative">
-                <div className="relative h-96 overflow-hidden rounded-lg">
-                    {bannerImages.map((image, index) => (
-                        <div
-                            key={index}
-                            className={`absolute w-full h-full transition-opacity duration-500 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
-                        >
-                            <img
-                                src={image}
-                                alt={`Banner ${index + 1}`}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    ))}
-                    <button
-                        onClick={prevSlide}
-                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
+            <div className="relative h-96 md:h-screen overflow-hidden">
+                {bannerImages.map((image, index) => (
+                    <div
+                        key={index}
+                        className={`absolute w-full h-full transition-opacity duration-500 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
                     >
-                        ←
-                    </button>
-                    <button
-                        onClick={nextSlide}
-                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full"
-                    >
-                        →
-                    </button>
-                </div>
+                        <img
+                            src={image}
+                            alt={`Banner ${index + 1}`}
+                            className="w-full h-full object-cover"
+                        />
+                    </div>
+                ))}
             </div>
 
             <div className="container mx-auto px-4 py-12">

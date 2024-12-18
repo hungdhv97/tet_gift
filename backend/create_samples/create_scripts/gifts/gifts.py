@@ -1,12 +1,13 @@
+import os
+import random
+
+from django.core.files import File
+
 from cms.gifts.models import (
     Gift,
     GiftImage,
 )
-
-from create_samples.create_scripts.consts import (
-    GIFTS_SAMPLE_DATA,
-    GIFT_IMAGES_SAMPLE_DATA,
-)
+from create_samples.create_scripts.consts import GIFTS_SAMPLE_DATA
 
 
 def create_gifts():
@@ -25,18 +26,31 @@ def create_gifts():
         except Exception as e:
             print(f"Error creating Gift {gift_data['name']}: {e}")
 
-    for gift_image_data in GIFT_IMAGES_SAMPLE_DATA:
+    image_folder = "create_samples/unsamples"
+    image_files = [
+        os.path.join(image_folder, f)
+        for f in os.listdir(image_folder)
+        if os.path.isfile(os.path.join(image_folder, f))
+    ]
+
+    for gift_data in GIFTS_SAMPLE_DATA:
+        if not image_files:
+            print("No images found in the folder.")
+            break
         try:
-            gift_name = gift_image_data["gift"]["name"]
-            gift = Gift.objects.get(name=gift_name)
-            GiftImage.objects.create(
-                gift=gift,
-                image=gift_image_data["image"],
-                created_at=gift_image_data["created_at"],
-            )
+            gift = Gift.objects.get(name=gift_data["name"])
+            random_image = random.choice(image_files)
+            with open(random_image, "rb") as image_file:
+                GiftImage.objects.create(
+                    gift=gift,
+                    image=File(image_file),
+                    created_at=gift_data["created_at"],
+                )
         except Gift.DoesNotExist:
-            print(f"Gift with name {gift_name} does not exist. Cannot create GiftImage.")
+            print(
+                f"Gift with name {gift_data['name']} does not exist. Cannot create GiftImage."
+            )
         except Exception as e:
-            print(f"Error creating GiftImage for gift {gift_name}: {e}")
+            print(f"Error creating GiftImage for gift {gift_data['name']}: {e}")
 
     print("Gifts and GiftImages created successfully.")
