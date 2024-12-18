@@ -40,6 +40,8 @@ networks:
     driver: bridge
   global_default:
     external: true
+  nginx_proxy_manager_default:
+    external: true
 
 volumes:
   backend_static:
