@@ -3,70 +3,14 @@
 import React, { useEffect, useState } from "react";
 import { FaFacebook, FaPhone, FaWhatsapp } from "react-icons/fa";
 import { IoMail } from "react-icons/io5";
-
-type GiftType = {
-    id: number;
-    type: string;
-    description: string;
-    image: string;
-};
-
-type Gift = {
-    id: number;
-    name: string;
-    price: string;
-    description: string;
-    image: string;
-};
+import { useFetchGifts } from "@/queries/gifts";
 
 const LandingPage: React.FC = () => {
-    const [selectedGift, setSelectedGift] = useState<Gift | null>(null);
+    const { data: gifts } = useFetchGifts();
+    const [selectedGift, setSelectedGift] = useState<GiftResponse | null>(null);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
 
-    const giftTypes: GiftType[] = [
-        {
-            id: 1,
-            type: "Hộp quà tết",
-            description: "Những hộp quà tết sang trọng và ý nghĩa",
-            image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a",
-        },
-        {
-            id: 2,
-            type: "Giỏ quà tết",
-            description: "Giỏ quà tết đa dạng, phong phú",
-            image: "https://images.unsplash.com/photo-1512909006721-3d6018887383",
-        },
-    ];
-
-    const gifts: Gift[] = [
-        {
-            id: 1,
-            name: "Premium Gift Box",
-            price: "$99.99",
-            description: "Luxury gift box with premium selections",
-            image: "https://images.unsplash.com/photo-1549465220-1a8b9238cd48",
-        },
-        {
-            id: 2,
-            name: "Traditional Basket",
-            price: "$79.99",
-            description: "Traditional items in beautiful arrangement",
-            image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574",
-        },
-        {
-            id: 3,
-            name: "Deluxe Hamper",
-            price: "$149.99",
-            description: "Exclusive collection of premium items",
-            image: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a",
-        },
-    ];
-
-    const bannerImages: string[] = [
-        "https://images.unsplash.com/photo-1512909006721-3d6018887383",
-        "https://images.unsplash.com/photo-1513885535751-8b9238bd345a",
-        "https://images.unsplash.com/photo-1549465220-1a8b9238cd48",
-    ];
+    const bannerImages = gifts ? gifts.flatMap((gift) => gift.images.map((image) => image.image)) : [];
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
@@ -79,7 +23,9 @@ const LandingPage: React.FC = () => {
     useEffect(() => {
         const timer = setInterval(nextSlide, 5000);
         return () => clearInterval(timer);
-    }, []);
+    }, [bannerImages]);
+
+    if (!gifts) return null;
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -132,39 +78,6 @@ const LandingPage: React.FC = () => {
             </div>
 
             <div className="container mx-auto px-4 py-12">
-                <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Loại quà tết</h2>
-                <div className="grid md:grid-cols-2 gap-8">
-                    {giftTypes.map((type) => (
-                        <div key={type.id} className="relative overflow-hidden rounded-lg shadow-lg group">
-                            <img
-                                src={type.image}
-                                alt={type.type}
-                                className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-110"
-                            />
-                            <div
-                                className="absolute inset-0 bg-black bg-opacity-40 flex flex-col justify-center items-center text-white p-4">
-                                <h3 className="text-2xl font-bold mb-2">{type.type}</h3>
-                                <p className="text-center">{type.description}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            <div className="bg-red-50 py-12">
-                <div className="container mx-auto px-4">
-                    <div className="bg-red-600 rounded-lg p-8 text-white text-center">
-                        <h2 className="text-3xl font-bold mb-4">Ưu đãi đặc biệt</h2>
-                        <p className="text-xl mb-6">Giảm giá 20% cho đơn hàng trên $200</p>
-                        <button
-                            className="bg-white text-red-600 px-6 py-2 rounded-full font-semibold hover:bg-red-100 transition-colors">
-                            Xem ngay
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div className="container mx-auto px-4 py-12">
                 <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Danh sách quà tết</h2>
                 <div className="grid md:grid-cols-3 gap-8">
                     {gifts.map((gift) => (
@@ -174,7 +87,7 @@ const LandingPage: React.FC = () => {
                             onClick={() => setSelectedGift(gift)}
                         >
                             <img
-                                src={gift.image}
+                                src={gift.images[0]?.image}
                                 alt={gift.name}
                                 className="w-full h-48 object-cover"
                             />
@@ -201,7 +114,7 @@ const LandingPage: React.FC = () => {
                             </button>
                         </div>
                         <img
-                            src={selectedGift.image}
+                            src={selectedGift.images[0]?.image}
                             alt={selectedGift.name}
                             className="w-full h-64 object-cover rounded-lg mb-4"
                         />
@@ -214,34 +127,6 @@ const LandingPage: React.FC = () => {
                     </div>
                 </div>
             )}
-
-            <footer className="bg-gray-800 text-white py-12">
-                <div className="container mx-auto px-4">
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <div>
-                            <h4 className="text-xl font-bold mb-4">Liên hệ</h4>
-                            <p className="mb-2">123 Đường ABC, Quận XYZ</p>
-                            <p className="mb-2">Email: info@example.com</p>
-                            <p>Phone: +123 456 7890</p>
-                        </div>
-                        <div>
-                            <h4 className="text-xl font-bold mb-4">Theo dõi chúng tôi</h4>
-                            <div className="flex space-x-4">
-                                <FaFacebook size={24} className="cursor-pointer hover:text-red-400" />
-                                <FaWhatsapp size={24} className="cursor-pointer hover:text-red-400" />
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="text-xl font-bold mb-4">Giờ làm việc</h4>
-                            <p className="mb-2">Thứ 2 - Thứ 6: 9:00 - 18:00</p>
-                            <p>Thứ 7 - Chủ nhật: 9:00 - 17:00</p>
-                        </div>
-                    </div>
-                    <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-                        <p>© 2024 Gift Shop. All rights reserved.</p>
-                    </div>
-                </div>
-            </footer>
         </div>
     );
 };
