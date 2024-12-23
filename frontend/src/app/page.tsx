@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaFacebook, FaPhone, FaWhatsapp } from "react-icons/fa";
+import { FaFacebook, FaPhone } from "react-icons/fa";
+import { SiZalo } from "react-icons/si";
 import { IoMail } from "react-icons/io5";
 import { useFetchGifts } from "@/queries/gifts";
 
@@ -9,6 +10,7 @@ const LandingPage: React.FC = () => {
     const { data: gifts } = useFetchGifts();
     const [selectedGift, setSelectedGift] = useState<GiftResponse | null>(null);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
+    const [giftSlides, setGiftSlides] = useState<{ [key: number]: number }>({});
 
     const bannerImages = [
         "banner.png",
@@ -24,25 +26,61 @@ const LandingPage: React.FC = () => {
         return () => clearInterval(timer);
     }, [bannerImages]);
 
+    useEffect(() => {
+        if (gifts) {
+            const initialSlides: { [key: number]: number } = {};
+            gifts.forEach(gift => {
+                initialSlides[gift.id] = 0;
+            });
+            setGiftSlides(initialSlides);
+        }
+    }, [gifts]);
+
+    const nextGiftSlide = (giftId: number, imageCount: number) => {
+        setGiftSlides(prevSlides => ({
+            ...prevSlides,
+            [giftId]: (prevSlides[giftId] + 1) % imageCount,
+        }));
+    };
+
+    useEffect(() => {
+        const timers: { [key: number]: NodeJS.Timeout } = {};
+        if (gifts) {
+            gifts.forEach(gift => {
+                timers[gift.id] = setInterval(() => {
+                    nextGiftSlide(gift.id, gift.images.length);
+                }, 3000);
+            });
+        }
+        return () => {
+            Object.values(timers).forEach(timer => clearInterval(timer));
+        };
+    }, [gifts]);
+
     if (!gifts) return null;
+
+    const formatPrice = (price: number) => {
+        return price.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
             <header className="bg-red-600 text-white py-2 fixed top-0 left-0 w-full z-50">
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div className="flex items-center space-x-4">
-                        <a href="tel:+1234567890" className="flex items-center space-x-2 hover:text-red-200">
+                        <a href="tel:0347996393" className="flex items-center space-x-2 hover:text-red-200">
                             <FaPhone />
-                            <span>+123 456 7890</span>
+                            <span>034 799 6393</span>
                         </a>
-                        <a href="mailto:info@example.com" className="flex items-center space-x-2 hover:text-red-200">
+                        <a href="mailto:thuhanggift@gmail.com"
+                           className="flex items-center space-x-2 hover:text-red-200">
                             <IoMail />
-                            <span>info@example.com</span>
+                            <span>thuhanggift@gmail.com</span>
                         </a>
                     </div>
                     <div className="flex space-x-4">
-                        <a href="#" className="hover:text-red-200"><FaWhatsapp size={20} /></a>
-                        <a href="#" className="hover:text-red-200"><FaFacebook size={20} /></a>
+                        <a href="https://zalo.me/0347996393" className="hover:text-red-200"><SiZalo size={30} /></a>
+                        <a href="#" className="hover:text-red-200"><FaFacebook size={30} /></a>
                     </div>
                 </div>
             </header>
@@ -71,15 +109,28 @@ const LandingPage: React.FC = () => {
                             className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-transform"
                             onClick={() => setSelectedGift(gift)}
                         >
-                            <img
-                                src={gift.images[0]?.image}
-                                alt={gift.name}
-                                className="w-full h-48 object-cover"
-                            />
+                            <div className="relative h-64 overflow-hidden">
+                                {gift.images.map((image, index) => (
+                                    <div
+                                        key={index}
+                                        className={`absolute w-full h-full transition-opacity duration-500 ${index === giftSlides[gift.id] ? "opacity-100" : "opacity-0"}`}
+                                    >
+                                        <img
+                                            src={image.image}
+                                            alt={gift.name}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                             <div className="p-4">
                                 <h3 className="text-xl font-semibold mb-2">{gift.name}</h3>
-                                <p className="text-gray-600 mb-2">{gift.description}</p>
-                                <p className="text-red-600 font-bold">{gift.price}</p>
+                                <p className="text-gray-600 mb-2">
+                                    {gift.description.split(/[\r\n]+/).map((line, index) => (
+                                        <span key={index} className="block"> - {line}</span>
+                                    ))}
+                                </p>
+                                <p className="text-red-600 font-bold">{formatPrice(gift.price)}</p>
                             </div>
                         </div>
                     ))}
@@ -98,14 +149,28 @@ const LandingPage: React.FC = () => {
                                 ×
                             </button>
                         </div>
-                        <img
-                            src={selectedGift.images[0]?.image}
-                            alt={selectedGift.name}
-                            className="w-full h-64 object-cover rounded-lg mb-4"
-                        />
-                        <p className="text-gray-600 mb-4">{selectedGift.description}</p>
-                        <p className="text-red-600 font-bold text-xl mb-4">{selectedGift.price}</p>
+                        <div className="relative h-64 overflow-hidden">
+                            {selectedGift.images.map((image, index) => (
+                                <div
+                                    key={index}
+                                    className={`absolute w-full h-full transition-opacity duration-500 ${index === giftSlides[selectedGift.id] ? "opacity-100" : "opacity-0"}`}
+                                >
+                                    <img
+                                        src={image.image}
+                                        alt={selectedGift.name}
+                                        className="w-full h-full object-cover rounded-lg"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <p className="text-gray-600 m-4">
+                            {selectedGift.description.split(/[\r\n]+/).map((line, index) => (
+                                <span key={index} className="block"> - {line}</span>
+                            ))}
+                        </p>
+                        <p className="text-red-600 font-bold text-xl mb-4">{formatPrice(selectedGift.price)}</p>
                         <button
+                            onClick={() => window.location.href = "tel:0347996393"}
                             className="bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 transition-colors">
                             Đặt hàng ngay
                         </button>

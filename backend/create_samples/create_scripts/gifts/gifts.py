@@ -39,13 +39,14 @@ def create_gifts():
             break
         try:
             gift = Gift.objects.get(name=gift_data["name"])
-            random_image = random.choice(image_files)
-            with open(random_image, "rb") as image_file:
-                GiftImage.objects.create(
-                    gift=gift,
-                    image=File(image_file),
-                    created_at=gift_data["created_at"],
-                )
+            for _ in range(3):
+                random_image = random.choice(image_files)
+                with open(random_image, "rb") as image_file:
+                    GiftImage.objects.create(
+                        gift=gift,
+                        image=File(image_file),
+                        created_at=gift_data["created_at"],
+                    )
         except Gift.DoesNotExist:
             print(
                 f"Gift with name {gift_data['name']} does not exist. Cannot create GiftImage."
