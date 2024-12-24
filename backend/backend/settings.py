@@ -47,6 +47,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 INSTALLED_APPS = [
     "cms.gifts",
+    "cms.metas",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

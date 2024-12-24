@@ -5,26 +5,24 @@ import { FaFacebook, FaPhone } from "react-icons/fa";
 import { SiZalo } from "react-icons/si";
 import { IoMail } from "react-icons/io5";
 import { useFetchGifts } from "@/queries/gifts";
+import { useFetchBanners, useFetchMeta } from "@/queries/metas";
 
 const LandingPage: React.FC = () => {
     const { data: gifts } = useFetchGifts();
+    const { data: banners } = useFetchBanners();
+    const { data: meta } = useFetchMeta();
     const [selectedGift, setSelectedGift] = useState<GiftResponse | null>(null);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [giftSlides, setGiftSlides] = useState<{ [key: number]: number }>({});
 
-    const bannerImages = [
-        "banner.png",
-        "banner1.png",
-        "banner2.png",
-    ];
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev === bannerImages.length - 1 ? 0 : prev + 1));
+        setCurrentSlide((prev) => (prev === (banners?.length || 1) - 1 ? 0 : prev + 1));
     };
 
     useEffect(() => {
         const timer = setInterval(nextSlide, 3000);
         return () => clearInterval(timer);
-    }, [bannerImages]);
+    }, [banners]);
 
     useEffect(() => {
         if (gifts) {
@@ -57,7 +55,7 @@ const LandingPage: React.FC = () => {
         };
     }, [gifts]);
 
-    if (!gifts) return null;
+    if (!gifts || !banners || !meta) return null;
 
     const formatPrice = (price: number) => {
         return price.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
@@ -65,38 +63,35 @@ const LandingPage: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <header className="bg-red-600 text-white py-2 fixed top-0 left-0 w-full z-50">
+            <header className="bg-red-600 text-white py-2 fixed top-0 left-0 w-full z-50 h-14">
                 <div className="container mx-auto px-4 flex justify-between items-center">
                     <div className="flex items-center space-x-4">
-                        <a href="tel:0347996393" className="flex items-center space-x-2 hover:text-red-200">
-                            <FaPhone />
-                            <span>034 799 6393</span>
-                        </a>
-                        <a href="mailto:thuhanggift@gmail.com"
+                        <a href={`tel:${meta.telephone}`}
                            className="flex items-center space-x-2 hover:text-red-200">
+                            <FaPhone />
+                            <span>{meta.telephone}</span>
+                        </a>
+                        <a href={`mailto:${meta.email}`}
+                           className="max-md:hidden flex items-center space-x-2 hover:text-red-200">
                             <IoMail />
-                            <span>thuhanggift@gmail.com</span>
+                            <span>{meta.email}</span>
                         </a>
                     </div>
                     <div className="flex space-x-4">
-                        <a href="https://zalo.me/0347996393" className="hover:text-red-200"><SiZalo size={30} /></a>
-                        <a href="#" className="hover:text-red-200"><FaFacebook size={30} /></a>
+                        <a href={meta.zalo} className="hover:text-red-200"><SiZalo size={30} /></a>
+                        <a href={meta.facebook} className="hover:text-red-200"><FaFacebook size={30} /></a>
                     </div>
                 </div>
             </header>
 
-            <div className="relative h-96 md:h-screen overflow-hidden">
-                {bannerImages.map((image, index) => (
-                    <div
-                        key={index}
-                        className={`absolute w-full h-full transition-opacity duration-500 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
-                    >
-                        <img
-                            src={image}
-                            alt={`Banner ${index + 1}`}
-                            className="w-full h-full object-cover"
-                        />
-                    </div>
+            <div className="relative h-48 md:h-screen overflow-hidden mt-14">
+                {banners.map((banner: BannerResponse, index: number) => (
+                    <img
+                        key={banner.id}
+                        src={banner.image}
+                        alt={`Banner ${index + 1}`}
+                        className={`absolute w-full h-full object-cover transition-opacity duration-500 ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
+                    />
                 ))}
             </div>
 
@@ -170,7 +165,7 @@ const LandingPage: React.FC = () => {
                         </p>
                         <p className="text-red-600 font-bold text-xl mb-4">{formatPrice(selectedGift.price)}</p>
                         <button
-                            onClick={() => window.location.href = "tel:0347996393"}
+                            onClick={() => window.location.href = `tel:${meta.telephone}`}
                             className="bg-red-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-700 transition-colors">
                             Đặt hàng ngay
                         </button>

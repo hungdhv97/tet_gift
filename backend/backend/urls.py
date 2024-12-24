@@ -26,6 +26,7 @@ from django.urls import (
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/gifts/", include("cms.gifts.urls")),
+    path("api/metas/", include("cms.metas.urls")),
 ]
 
 if settings.DEBUG:
