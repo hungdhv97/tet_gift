@@ -104,7 +104,7 @@ const LandingPage: React.FC = () => {
                             className="bg-white rounded-lg shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-1 transition-transform"
                             onClick={() => setSelectedGift(gift)}
                         >
-                            <div className="relative h-64 overflow-hidden">
+                            <div className="relative aspect-square overflow-hidden">
                                 {gift.images.map((image, index) => (
                                     <div
                                         key={index}
@@ -134,7 +134,7 @@ const LandingPage: React.FC = () => {
 
             {selectedGift && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+                    <div className="bg-white rounded-lg max-w-xl w-full p-6">
                         <div className="flex justify-between items-start mb-4">
                             <h3 className="text-2xl font-bold">{selectedGift.name}</h3>
                             <button
@@ -144,7 +144,7 @@ const LandingPage: React.FC = () => {
                                 ×
                             </button>
                         </div>
-                        <div className="relative h-64 overflow-hidden">
+                        <div className="relative aspect-square overflow-hidden">
                             {selectedGift.images.map((image, index) => (
                                 <div
                                     key={index}
